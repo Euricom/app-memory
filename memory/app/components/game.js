@@ -87,12 +87,12 @@ export class Game extends React.Component{
         this.checkMemory();
     }
     renderImages(){
-        console.log('rendering the images');
         var list = this.state.images.map((item, index) => {
+            console.log()
             var binder = this.handleGameItemClick.bind(this, item, index);
             return (
                 <View key={index}>
-                    <GameItem                        
+                    <GameItem
                         reference={item.reference}
                         link={item.image}
                         onClick={binder}

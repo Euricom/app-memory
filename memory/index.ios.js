@@ -6,31 +6,14 @@
 import React, {
   AppRegistry,
   Component,
-  StyleSheet,
-  Text,
-  View,
-  NavigatorIOS
 } from 'react-native';
 
-import { Main } from './app/components/main';
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#111111'
-    }
-})
+import { App } from './app/app';
 
 class memory extends Component {
   render() {
     return (
-      <NavigatorIOS
-        style={styles.container}
-        initialRoute={{
-            title: 'Memory',
-            component: Main,
-        }}>
-        </NavigatorIOS>
+      <App />
     );
   }
 }

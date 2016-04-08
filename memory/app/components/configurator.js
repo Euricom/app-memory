@@ -132,7 +132,7 @@ export class Configurator extends React.Component{
                         style={styles.button}
                         onPress={this.saveToState.bind(this)}
                         underlayColor='white'>
-                        <Text style={styles.buttonText}>Browse</Text>
+                        <Text style={styles.buttonText}>Save setup</Text>
                     </TouchableHighlight>
                 </View>
             </View>
@@ -140,6 +140,7 @@ export class Configurator extends React.Component{
     }
     saveToState(){
         console.log('data should now be saved onto the store');
+        
     }
     handleOnXChange(event){
         this.setState({

@@ -11,7 +11,6 @@ import React,
         TextInput,
     }
     from 'react-native';
-import { connect } from 'react-redux';
 import { UpdateConfigAction} from '../actions/config.actions';
 
 import { ImagePickerManager } from 'NativeModules';
@@ -80,7 +79,7 @@ const styles = StyleSheet.create({
     }
 })
 
-class Configurator extends React.Component{
+export class Configurator extends React.Component{
     constructor(props){
         super(props);
         this.state = {
@@ -156,7 +155,6 @@ class Configurator extends React.Component{
             imagesAndPrices.push(ob);
         }
         console.log(imagesAndPrices);
-        this.updateConfig(Question, this.state.tileX, this.state.tileY, imagesAndPrices);
     }
     handleOnXChange(event){
         this.setState({
@@ -317,22 +315,3 @@ class Configurator extends React.Component{
     //     });
     // }
 }
-
-const mapStateToProps = (state, ownProps) => {
-    return {
-        config: state.config,
-    }
-}
-
-const mapDispatchToProps = (dispatch, ownProps) => {
-    return {
-        updateConfig: (question, tileX, tileY, imagesAndPrices) => {
-            dispatch(UpdateConfigAction(question, tileX, tileY, imagesAndPrices))
-        }
-    }
-}
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(Configurator);

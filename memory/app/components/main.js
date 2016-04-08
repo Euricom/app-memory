@@ -8,9 +8,11 @@ import React,
     }
     from 'react-native';
 import { Logo } from '../data/data';
-import { Game } from './game';
-import { Configurator } from './configurator';
 import { Authenticator } from './authenticator';
+import { Configurator } from './configurator';
+import { Game } from './game';
+
+import { connect } from 'react-redux';
 
 const styles = StyleSheet.create({
     container: {
@@ -118,3 +120,20 @@ export class Main extends React.Component{
         })
     }
 }
+
+// const mapStateToProps = (state, ownProps) => {
+//     return {
+//
+//     }
+// }
+//
+// const mapDispatchToProps = (dispatch, ownProps) => {
+//     return {
+//
+//     }
+// }
+//
+// export default connect(
+//     mapStateToProps,
+//     mapDispatchToProps
+// )(Main);

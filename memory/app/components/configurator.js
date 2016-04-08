@@ -126,8 +126,20 @@ export class Configurator extends React.Component{
                 <View style={styles.list}>
                     {this.showImages()}
                 </View>
+                <View
+                    style={styles.rowContainer}>
+                    <TouchableHighlight
+                        style={styles.button}
+                        onPress={this.saveToState.bind(this)}
+                        underlayColor='white'>
+                        <Text style={styles.buttonText}>Browse</Text>
+                    </TouchableHighlight>
+                </View>
             </View>
         )
+    }
+    saveToState(){
+        console.log('data should now be saved onto the store');
     }
     handleOnXChange(event){
         this.setState({
@@ -192,40 +204,41 @@ export class Configurator extends React.Component{
     //      console.log(err);
     //  }
 
-     selectQuestionImage() {
-        var options = {
-            title: '', // specify null or empty string to remove the title
-            cancelButtonTitle: 'Cancel',
-            takePhotoButtonTitle: '', // specify null or empty string to remove this button
-            chooseFromLibraryButtonTitle: 'Choose from Library...', // specify null or empty string to remove this button
-            cameraType: 'back', // 'front' or 'back'
-            mediaType: 'photo', // 'photo' or 'video'
-            maxWidth: 100, // photos only
-            maxHeight: 100, // photos only
-            quality: 0.2, // 0 to 1, photos only
-            noData: false, // photos only - disables the base64 `data` field from being generated (greatly improves performance on large photos)
-            storageOptions: { // if this key is provided, the image will get saved in the documents directory on ios, and the pictures directory on android (rather than a temporary directory)
-                skipBackup: true, // ios only - image will NOT be backed up to icloud
-            }
-        };
-        ImagePickerManager.showImagePicker(options, (response) => {
-            console.log('Response = ', response);
-
-            if (response.didCancel) {
-                console.log('User cancelled image picker');
-            }
-            else if (response.error) {
-                console.log('ImagePickerManager Error: ', response.error);
-            }
-            else if (response.customButton) {
-                console.log('User tapped custom button: ', response.customButton);
-            }
-            else {
-                const source = {uri: 'data:image/jpeg;base64,' + response.data, isStatic: true};
-                this.setState({
-                    questionSource: source
-                });
-            }
-        });
-    }
+    /*This code is added for getting images from the device memory*/
+    //  selectQuestionImage() {
+    //     var options = {
+    //         title: '', // specify null or empty string to remove the title
+    //         cancelButtonTitle: 'Cancel',
+    //         takePhotoButtonTitle: '', // specify null or empty string to remove this button
+    //         chooseFromLibraryButtonTitle: 'Choose from Library...', // specify null or empty string to remove this button
+    //         cameraType: 'back', // 'front' or 'back'
+    //         mediaType: 'photo', // 'photo' or 'video'
+    //         maxWidth: 100, // photos only
+    //         maxHeight: 100, // photos only
+    //         quality: 0.2, // 0 to 1, photos only
+    //         noData: false, // photos only - disables the base64 `data` field from being generated (greatly improves performance on large photos)
+    //         storageOptions: { // if this key is provided, the image will get saved in the documents directory on ios, and the pictures directory on android (rather than a temporary directory)
+    //             skipBackup: true, // ios only - image will NOT be backed up to icloud
+    //         }
+    //     };
+    //     ImagePickerManager.showImagePicker(options, (response) => {
+    //         console.log('Response = ', response);
+    //
+    //         if (response.didCancel) {
+    //             console.log('User cancelled image picker');
+    //         }
+    //         else if (response.error) {
+    //             console.log('ImagePickerManager Error: ', response.error);
+    //         }
+    //         else if (response.customButton) {
+    //             console.log('User tapped custom button: ', response.customButton);
+    //         }
+    //         else {
+    //             const source = {uri: 'data:image/jpeg;base64,' + response.data, isStatic: true};
+    //             this.setState({
+    //                 questionSource: source
+    //             });
+    //         }
+    //     });
+    // }
 }

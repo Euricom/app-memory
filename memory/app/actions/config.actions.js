@@ -1,7 +1,11 @@
 import * as types from './actionTypes';
 
-export function question() {
+export function UpdateConfigAction(question, tileX, tileY, imagesAndPrices) {
   return {
-    type: types.question,
+    type: types.UPDATE_CONFIG,
+    question,
+    tileX,
+    tileY,
+    imagesAndPrices
   };
 }

@@ -69,14 +69,17 @@ export class ConfiguratorImage extends React.Component{
         return styles.button;
     }
     handleClick(){
+        this.props.onClick(!this.state.active);
+    }
+    setActiveState(value){
         this.setState({
-            active: !this.state.active
+            active: value
         })
-        this.props.onClick(this.state.active);
     }
 }
 
 ConfiguratorImage.propTypes = {
     item: React.PropTypes.object.isRequired,
+    index: React.PropTypes.number.isRequired,
     onClick: React.PropTypes.func.isRequired,
 }

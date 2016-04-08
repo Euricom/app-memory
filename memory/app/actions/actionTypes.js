@@ -1,1 +1,1 @@
-export const CHANGE_QUESTION = 'Change_Question';
+export const UPDATE_CONFIG = 'UpdateConfig';

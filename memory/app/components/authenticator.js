@@ -87,20 +87,54 @@ export class Authenticator extends React.Component{
             visible={this.props.modalVisible}>
             <View style={[styles.container, modalBackgroundStyle]}>
               <View style={[styles.innerContainer, innerContainerTransparentStyle]}>
-                <Text>{this.props.modalValues.header}</Text>
-                {this.hasPassword()}
-
-                <TouchableHighlight
-                  onPress={this.close.bind(this)}
-                  style={styles.button}>
-                  <Text style={styles.buttonText}>{this.props.modalValues.closeText}</Text>
-                </TouchableHighlight>
+                {this.showHeader()}
+                {this.showMiddle()}
+                {this.showFooter()}
+                <Text> </Text>
+                {this.showPassword()}
+                {this.showClose()}
               </View>
             </View>
           </Modal>
       );
     }
-    hasPassword(){
+    showHeader(){
+        if(this.props.modalValues.header){
+            return (
+                <Text>{this.props.modalValues.header}</Text>
+            )
+        }
+        return ( <View />)
+    }
+    showMiddle(){
+        if(this.props.modalValues.middleText){
+            return (
+                <Text>{this.props.modalValues.middleText}</Text>
+            )
+        }
+        return ( <View />)
+    }
+    showFooter(){
+        if(this.props.modalValues.footer){
+            return (
+                <Text>{this.props.modalValues.footer}</Text>
+            )
+        }
+        return ( <View />)
+    }
+    showClose(){
+        if(this.props.modalValues.closeText){
+            return(
+                <TouchableHighlight
+                  onPress={this.close.bind(this)}
+                  style={styles.button}>
+                  <Text style={styles.buttonText}>{this.props.modalValues.closeText}</Text>
+                </TouchableHighlight>
+            )
+        }
+        return ( <View />)
+    }
+    showPassword(){
         if(this.props.modalValues.password){
             return (
                 <View>
@@ -116,9 +150,8 @@ export class Authenticator extends React.Component{
                     </TouchableHighlight>
                 </View>
             )
-        } else {
-            return ( <View />)
         }
+        return ( <View />)
     }
     close(){
         this.setState({

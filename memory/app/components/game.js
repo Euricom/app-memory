@@ -13,6 +13,7 @@ import { connect } from 'react-redux';
 import { UpdateConfigImageAction } from '../actions/config.actions';
 
 import { getImagesShuffledAndDoubled } from '../data/data';
+import { Authenticator } from './authenticator';
 import { GameItem } from './game.item';
 
 const {height, width} = Dimensions.get('window');
@@ -30,6 +31,8 @@ class Game extends React.Component{
         super(props);
 
         this.state = {
+            modal: false,
+            authenticate: {},
             references: [], //those that are being handled
             images: getImagesShuffledAndDoubled(this.props.config.imagesAndPrices),
             imageWidth: 150,
@@ -40,11 +43,20 @@ class Game extends React.Component{
     render(){
         return (
             <View style={styles.container}>
+                <Authenticator
+                    modalVisible={this.state.modal}
+                    modalValues={this.state.authenticate}
+                    onEnter={this.onEnter.bind(this)}/>
                 <View style={this.calculateStyle()}>
                     {this.renderImages()}
                 </View>
             </View>
         )
+    }
+    onEnter(ret){
+        this.setState({
+            modal: false
+        })
     }
     turnCards(){
         console.log(this.state.references);
@@ -58,6 +70,11 @@ class Game extends React.Component{
     }
     cardsDone(){
         var storeReference = this.state.references[0].item;
+        console.log(storeReference);
+        this.setState({
+            modal: true,
+            authenticate: this.getPasswordObject(storeReference.price.price)
+        })
         this.updateStateImages(storeReference);
         this.updateStoreImages(storeReference);
         // for (var i = 0; i < this.state.references.length; i++) {
@@ -158,6 +175,17 @@ class Game extends React.Component{
             )
         })
         return list;
+    }
+    getPasswordObject(price) {
+        return {
+            header: 'Gefeliciteerd, U heeft gewonnen!!!',
+            middleText: `Prijs: ${price}`,
+            footer: 'Toon dit scherm aan een Euricom medewerker',
+            password: true,
+            passwordText: 'Meld aan',
+            passwordToCheck: '3uric0m',
+        }
+
     }
 }
 

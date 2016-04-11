@@ -8,41 +8,42 @@ import React,
     from 'react-native';
 import { Question } from '../data/data';
 
-
-const styles = StyleSheet.create({
-    button:{
-        borderRadius: 10,
-        height: 150,
-        width: 150,
-        flexWrap: 'wrap'
-    },
-    image: {
-        height: 145,
-        width: 145,
-        padding: 5,
-    }
-})
-
 export class GameItem extends React.Component{
     constructor(props){
         super(props);
         this.state={
             active: false,
-            done: false
+            done: false,
         }
     }
+
     render(){
         return (
             <TouchableHighlight
                 onPress={this.handleClick.bind(this)}
-                style={styles.button}
+                style={this.getButtonStyle()}
                 underlayColor="white">
                 <Image
-                    style={styles.image}
+                    style={this.getImageButtonStyle()}
                     source={this.getImageOnState()}
                     resizeMode='stretch'/>
             </TouchableHighlight>
         )
+    }
+    getButtonStyle(){
+        return {
+            margin: 5,
+            borderRadius: 10,
+            height: this.props.width,
+            width: this.props.width,
+        }
+    }
+    getImageButtonStyle(){
+        return {
+            height: this.props.width - 5,
+            width: this.props.width - 5,
+            padding: 5,
+        }
     }
     setDone(){
         this.setState({
@@ -75,4 +76,5 @@ GameItem.propTypes = {
     reference: React.PropTypes.string.isRequired,
     link: React.PropTypes.number.isRequired,
     onClick: React.PropTypes.func.isRequired,
+    width: React.PropTypes.number.isRequired,
 }

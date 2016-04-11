@@ -8,16 +8,26 @@ const initialState = {
 };
 
 export default function config(state = initialState, action = {}) {
-  switch (action.type) {
-    case types.UPDATE_CONFIG:
-      return {
-        ...state,
-        question: state.question,
-        tileX: state.tileX,
-        tileY: state.tileY,
-        imagesAndPrices: state.imagesAndPrices
-      };
-    default:
-      return state;
-  }
+    console.log(action)
+    switch(action.type){
+        case types.UPDATE_CONFIG_IMAGE:
+            console.log('updating the config imagesAndPrices');
+            return {
+                ...state,
+                imagesAndPrices: action.payload.imagesAndPrices
+            };
+            break;
+        case types.UPDATE_CONFIG:
+            console.log('updating the whole config');
+            return {
+                ...state,
+                question: action.payload.question,
+                tileX: action.payload.tileX,
+                tileY: action.payload.tileY,
+                imagesAndPrices: action.payload.imagesAndPrices
+            };
+            break;
+        default:
+            return state;
+    }
 }

@@ -7,12 +7,13 @@ import React,
         TouchableHighlight,
     }
     from 'react-native';
-import { Logo } from '../data/data';
-import { Authenticator } from './authenticator';
-import { Configurator } from './configurator';
-import { Game } from './game';
 
 import { connect } from 'react-redux';
+
+import { Logo } from '../data/data';
+import { Authenticator } from './authenticator';
+import Configurator from './configurator';
+import Game from './game';
 
 const styles = StyleSheet.create({
     container: {
@@ -42,20 +43,22 @@ const styles = StyleSheet.create({
     }
 })
 
-export class Main extends React.Component{
+class Main extends React.Component{
     constructor(props){
         super(props);
-        this.state= {
-            modal: false,
-            whereTo: ''
+        this.state = {
+            authenticator: false,
+            whereTo: '',
+            authenticate: {}
         }
     }
     render(){
         return (
             <View style={styles.container}>
                 <Authenticator
-                    modalVisible={this.state.modal}
-                    onLogin={this.onLogin.bind(this)} />
+                    modalVisible={this.state.authenticator}
+                    modalValues = { this.state.authenticate}
+                    onEnter={this.onEnter.bind(this)}/>
                 <Image
                     style={styles.image}
                     source={Logo}/>
@@ -63,36 +66,37 @@ export class Main extends React.Component{
                     style={styles.button}
                     onPress={this.handleCreate.bind(this)}
                     underlayColor='white'>
-                    <Text style={styles.buttonText}>New game</Text>
+                    <Text style={styles.buttonText}> New game </Text>
                 </TouchableHighlight>
                 <TouchableHighlight
                     style={styles.button}
                     onPress={this.handleContinue.bind(this)}
                     underlayColor='white'>
-                    <Text style={styles.buttonText}>Continue Memory</Text>
+                    <Text style={styles.buttonText}> Continue Memory </Text>
                 </TouchableHighlight>
             </View>
         )
     }
     handleCreate(){
         this.setState({
-            modal: true,
+            authenticator: true,
+            authenticate: this.getPasswordObject,
             whereTo: 'config'
         })
     }
-    onLogin(open){
+    onEnter(open){
         if(open){
             this.setState ({
-                modal: false,
+                authenticator: false,
             })
             this.pushTo();
         } else {
             this.setState ({
-                modal: false,
+                authenticator: false,
+                authenticate: {},
                 whereTo: ''
             })
         }
-
     }
     pushTo(){
         switch (this.state.whereTo) {
@@ -104,36 +108,66 @@ export class Main extends React.Component{
                 break;
             case 'game':
                 this.props.navigator.push({
-                    title: 'Memories',
+                    title: 'Memories Game',
                     component: Game
                 })
                 break;
         }
         this.setState ({
-            whereTo: ''
+            whereTo: '',
+            authenticate: {},
         })
     }
     handleContinue(){
-        this.setState({
-            modal: true,
-            whereTo: 'game'
-        })
+        if(this.props.config.imagesAndPrices !== undefined
+            && this.props.config.imagesAndPrices.length > 0) {
+            this.setState({
+                authenticator: true,
+                authenticate: this.getPasswordObject,
+                whereTo: 'game'
+            })
+        }
+        else {
+            this.setState({
+                authenticator: true,
+                authenticate: this.getPasswordObjectForEmtyConfig,
+                whereTo: 'config'
+            })
+        }
+    }
+
+    getPasswordObjectForEmtyConfig = {
+        header: 'Er is nog geen setup aanwezig. Geef het wachtwoord om verder te gaan.',
+        password: true,
+        passwordText: 'Ga verder',
+        passwordToCheck: '3uric0m',
+        closeText: 'Sluiten',
+    }
+
+    getPasswordObject = {
+        header: 'Geef het wachtwoord',
+        password: true,
+        passwordText: 'Ga verder',
+        passwordToCheck: '3uric0m',
+        closeText: 'Sluiten',
     }
 }
 
-// const mapStateToProps = (state, ownProps) => {
-//     return {
-//
-//     }
-// }
-//
-// const mapDispatchToProps = (dispatch, ownProps) => {
-//     return {
-//
-//     }
-// }
-//
-// export default connect(
-//     mapStateToProps,
-//     mapDispatchToProps
-// )(Main);
+const mapStateToProps = (state, ownProps) => {
+    return {
+        config: state.config
+    }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        // sayHello: () => {
+        //     dispatch({type: 'getData', payload: 'Hello'})
+        // }
+    }
+}
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Main);

@@ -79,7 +79,7 @@ export function getImages(amount){
     This function will shuffle and double the inserted images array.
 */
 export function getImagesShuffledAndDoubled(images){
-    var list = images;
+    var list = [...images];
     list.push(...list);
     shuffle(list);
     return list;

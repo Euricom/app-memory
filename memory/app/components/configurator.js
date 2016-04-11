@@ -11,18 +11,21 @@ import React,
         TextInput,
     }
     from 'react-native';
-import { UpdateConfigAction} from '../actions/config.actions';
 
-import { ImagePickerManager } from 'NativeModules';
+import { connect } from 'react-redux';
+
+import { UpdateConfigAction } from '../actions/config.actions';
+
+// import { ImagePickerManager } from 'NativeModules';
 import { ConfiguratorImage } from './configurator.image';
-import { getImages, Question, getImagesShuffledAndDoubled } from '../data/data';
+import { getImages, Question } from '../data/data';
 
 const imageitem = 'image';
 const priceitem = 'image';
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginTop: 65,
+        // marginTop: 65,
     },
     rowContainer: {
         flexDirection: 'row',
@@ -79,10 +82,11 @@ const styles = StyleSheet.create({
     }
 })
 
-export class Configurator extends React.Component{
+class Configurator extends React.Component{
     constructor(props){
         super(props);
         this.state = {
+            question: Question,
             tileX: 0,
             tileY: 0,
             images: getImages(30),
@@ -98,7 +102,7 @@ export class Configurator extends React.Component{
                     <Text style={styles.text}>Default question image: </Text>
                 </View>
                 <View style={styles.list}>
-                    <Image style={styles.image} source={Question}/>
+                    <Image style={styles.image} source={this.state.question}/>
                 </View>
                 <View
                     style={styles.rowContainer}>
@@ -150,12 +154,20 @@ export class Configurator extends React.Component{
         for (var i = 0; i < this.getTileToImageCount(); i++) {
             var ob = {
                 image: this.state.activeImages[i],
-                price: this.state.activePrices[i]
+                price: this.state.activePrices[i],
+                done: false
             }
             imagesAndPrices.push(ob);
         }
         console.log(imagesAndPrices);
+        this.props.updateConfig(
+            this.state.question,
+            this.state.tileX,
+            this.state.tileY,
+            imagesAndPrices);
+        this.props.navigator.pop();
     }
+
     handleOnXChange(event){
         this.setState({
             tileX: parseInt(event.nativeEvent.text === ''? 0 : event.nativeEvent.text)
@@ -315,3 +327,22 @@ export class Configurator extends React.Component{
     //     });
     // }
 }
+
+const mapStateToProps = (state, ownProps) => {
+    return{
+        config: state.config
+    }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        updateConfig: (question, tileX, tileY, imagesAndPrices) => {
+            dispatch(UpdateConfigAction(question, tileX, tileY, imagesAndPrices))
+        }
+    }
+}
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Configurator);

@@ -16,10 +16,10 @@ const styles = StyleSheet.create({
         padding: 20,
         alignItems: 'center'
     },
-        innerContainer: {
+    innerContainer: {
         borderRadius: 10,
         alignItems: 'center',
-        width: 250,
+        width: 350,
     },
     row: {
         alignItems: 'center',
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
         borderRadius: 45,
         marginTop: 15,
         height: 44,
-        width: 150,
+        width: 250,
         justifyContent: 'center',
         overflow: 'hidden',
         backgroundColor: 'green'
@@ -63,16 +63,12 @@ const styles = StyleSheet.create({
 });
 
 export class Authenticator extends React.Component{
-    render(){
-
-    }
     constructor(props) {
         super(props);
         this.state = {
             animated: true,
             transparent: true,
-            password: '',
-            truePassword: '3uric0m',
+            inputValue: '',
         };
     }
 
@@ -91,49 +87,62 @@ export class Authenticator extends React.Component{
             visible={this.props.modalVisible}>
             <View style={[styles.container, modalBackgroundStyle]}>
               <View style={[styles.innerContainer, innerContainerTransparentStyle]}>
-                <Text>Master Password</Text>
-                <TextInput
-                    secureTextEntry={true}
-                    style={styles.input}
-                    value={this.state.password}
-                    onChange={this.handlePasswordChange.bind(this)}/>
-                <TouchableHighlight
-                  onPress={this.checkPassword.bind(this)}
-                  style={styles.button}>
-                  <Text style={styles.buttonText}>Login</Text>
-                </TouchableHighlight>
+                <Text>{this.props.modalValues.header}</Text>
+                {this.hasPassword()}
+
                 <TouchableHighlight
                   onPress={this.close.bind(this)}
                   style={styles.button}>
-                  <Text style={styles.buttonText}>Close</Text>
+                  <Text style={styles.buttonText}>{this.props.modalValues.closeText}</Text>
                 </TouchableHighlight>
               </View>
             </View>
           </Modal>
       );
     }
+    hasPassword(){
+        if(this.props.modalValues.password){
+            return (
+                <View>
+                    <TextInput
+                        secureTextEntry={true}
+                        style={styles.input}
+                        value={this.state.textValue}
+                        onChange={this.handleInput.bind(this)}/>
+                    <TouchableHighlight
+                      onPress={this.checkPassword.bind(this)}
+                      style={styles.button}>
+                      <Text style={styles.buttonText}>{this.props.modalValues.passwordText}</Text>
+                    </TouchableHighlight>
+                </View>
+            )
+        } else {
+            return ( <View />)
+        }
+    }
     close(){
         this.setState({
             password: ''
         })
-        this.props.onLogin(false);
+        this.props.onEnter(false);
     }
     checkPassword(){
-        if(this.state.password === this.state.truePassword){
+        if(this.props.modalValues.passwordToCheck === this.state.inputValue){
             this.setState({
-                password: ''
+                inputValue: ''
             })
-            this.props.onLogin(true);
+            this.props.onEnter(true);
         }
     }
-    handlePasswordChange(event){
+    handleInput(event){
         this.setState({
-            password: event.nativeEvent.text
+            inputValue: event.nativeEvent.text
         })
     }
 }
 
 Authenticator.propTypes = {
-    onLogin: React.PropTypes.func.isRequired,
-    modalVisible: React.PropTypes.bool.isRequired
+    onEnter: React.PropTypes.func.isRequired,
+    modalVisible: React.PropTypes.bool.isRequired,
+    modalValues: React.PropTypes.object.isRequired,
 }

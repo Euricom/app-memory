@@ -5,9 +5,12 @@ import React,
         Text,
         Modal,
         TouchableHighlight,
-        TextInput
+        TextInput,
+        Image
     }
     from 'react-native';
+
+import { pw } from '../data/data';
 
 const styles = StyleSheet.create({
     container: {
@@ -60,6 +63,10 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         alignSelf: 'center',
     },
+    image: {
+        height: 200,
+        width: 200,
+    },
 });
 
 export class Authenticator extends React.Component{
@@ -89,6 +96,7 @@ export class Authenticator extends React.Component{
               <View style={[styles.innerContainer, innerContainerTransparentStyle]}>
                 {this.showHeader()}
                 {this.showMiddle()}
+                {this.showImage()}
                 {this.showFooter()}
                 <Text> </Text>
                 {this.showPassword()}
@@ -97,6 +105,21 @@ export class Authenticator extends React.Component{
             </View>
           </Modal>
       );
+    }
+    showImage(){
+        if(this.props.modalValues.image){
+            return (
+                <View>
+                    <Text />
+                    <Image
+                        style={styles.image}
+                        source={this.props.modalValues.image}>
+                    </Image>
+                    <Text />
+                </View>
+            )
+        }
+        return ( <View />)
     }
     showHeader(){
         if(this.props.modalValues.header){
@@ -160,7 +183,7 @@ export class Authenticator extends React.Component{
         this.props.onEnter(false);
     }
     checkPassword(){
-        if(this.props.modalValues.passwordToCheck === this.state.inputValue){
+        if(pw === this.state.inputValue){
             this.setState({
                 inputValue: ''
             })

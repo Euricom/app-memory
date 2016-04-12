@@ -40,20 +40,26 @@ export class ConfiguratorImage extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            active: false,
+
         }
     }
     render(){
         return (
-            <TouchableHighlight
-                onPress={this.handleClick.bind(this)}
-                style={this.getButtonStyle()}
-                underlayColor="white">
-                <Image
-                    style={this.getImageStyle()}
-                    source={this.props.item.image}
-                    resizeMode='stretch'/>
-            </TouchableHighlight>
+            <View>
+                <TouchableHighlight
+                    onPress={this.handleClick.bind(this)}
+                    style={this.getButtonStyle()}
+                    underlayColor="white">
+                    <Image
+                        style={this.getImageStyle()}
+                        source={this.props.item.image}
+                        resizeMode='stretch'/>
+                </TouchableHighlight>
+                <TextInput
+                    style={styles.input}
+                    value={this.state.tiles.toString()}
+                    onChange={this.handleOnTileChange.bind(this)}/>
+            </View>
         )
     }
     getImageStyle(){

@@ -1,12 +1,11 @@
 import * as types from './actionTypes';
 
-export function UpdateConfigAction(question, tileX, tileY, imagesAndPrices) {
+export function UpdateConfigAction(question, tiles, imagesAndPrices) {
   return {
     type: types.UPDATE_CONFIG,
     payload: {
         question,
-        tileX,
-        tileY,
+        tiles,
         imagesAndPrices
     },
   };

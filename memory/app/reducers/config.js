@@ -2,8 +2,7 @@ import * as types from '../actions/actionTypes';
 
 const initialState = {
     question: {},
-    tileX: 0,
-    tileY: 0,
+    tiles: 0,
     imagesAndPrices: []
 };
 
@@ -22,8 +21,7 @@ export default function config(state = initialState, action = {}) {
             return {
                 ...state,
                 question: action.payload.question,
-                tileX: action.payload.tileX,
-                tileY: action.payload.tileY,
+                tiles: action.payload.tiles,
                 imagesAndPrices: action.payload.imagesAndPrices
             };
             break;

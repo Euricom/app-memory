@@ -87,8 +87,7 @@ class Configurator extends React.Component{
         super(props);
         this.state = {
             question: Question,
-            tileX: 0,
-            tileY: 0,
+            tiles: 0,
             images: getImages(30),
             activeImages: [],
             activePrices: [],
@@ -110,13 +109,8 @@ class Configurator extends React.Component{
                     <TextInput
                         keyboardType='numeric'
                         style={styles.input}
-                        value={this.state.tileX.toString()}
-                        onChange={this.handleOnXChange.bind(this)}/>
-                    <TextInput
-                        keyboardType='numeric'
-                        style={styles.input}
-                        value={this.state.tileY.toString()}
-                        onChange={this.handleOnYChange.bind(this)}/>
+                        value={this.state.tiles.toString()}
+                        onChange={this.handleOnTileChange.bind(this)}/>
                 </View>
                 <View
                     style={styles.rowContainer}>
@@ -162,21 +156,14 @@ class Configurator extends React.Component{
         console.log(imagesAndPrices);
         this.props.updateConfig(
             this.state.question,
-            this.state.tileX,
-            this.state.tileY,
+            this.state.tiles,
             imagesAndPrices);
         this.props.navigator.pop();
     }
 
-    handleOnXChange(event){
+    handleOnTileChange(event){
         this.setState({
-            tileX: parseInt(event.nativeEvent.text === ''? 0 : event.nativeEvent.text)
-        })
-        // this.setTiles();
-    }
-    handleOnYChange(event){
-        this.setState({
-            tileY: parseInt(event.nativeEvent.text === ''? 0 : event.nativeEvent.text)
+            tiles: parseInt(event.nativeEvent.text === ''? 0 : event.nativeEvent.text)
         })
         // this.setTiles();
     }
@@ -224,7 +211,7 @@ class Configurator extends React.Component{
         }
     }
     getTileToImageCount(){
-        return (this.state.tileX * this.state.tileY) / 2;
+        return this.state.tiles / 2;
     }
     setTiles(){
         var amount = this.getTileToImageCount();
@@ -336,8 +323,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        updateConfig: (question, tileX, tileY, imagesAndPrices) => {
-            dispatch(UpdateConfigAction(question, tileX, tileY, imagesAndPrices))
+        updateConfig: (question, tiles, imagesAndPrices) => {
+            dispatch(UpdateConfigAction(question, tiles, imagesAndPrices))
         }
     }
 }

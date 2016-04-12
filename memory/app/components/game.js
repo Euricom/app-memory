@@ -30,15 +30,15 @@ class Game extends React.Component{
     constructor(props){
         super(props);
 
+        //var p = this.calculateWidthAndMargin();
         this.state = {
             modal: false,
             authenticate: {},
             references: [], //those that are being handled
             images: getImagesShuffledAndDoubled(this.props.config.imagesAndPrices),
-            imageWidth: 150,
-            listMargin: 15
+            imageWidth: 150, //p.imageWidth,
+            listMargin: 15,  // p.listMargin
         }
-        this.calculateWidthAndMargin();
     }
     render(){
         return (
@@ -73,7 +73,7 @@ class Game extends React.Component{
         console.log(storeReference);
         this.setState({
             modal: true,
-            authenticate: this.getPasswordObject(storeReference.price.price)
+            authenticate: this.getPasswordObject(storeReference)
         })
         this.updateStateImages(storeReference);
         this.updateStoreImages(storeReference);
@@ -86,10 +86,18 @@ class Game extends React.Component{
         })
     }
     updateStateImages(reference){
-        console.log(this.refs);
-        for (var i = 0; i < this.refs.length; i++) {
-
+        var list = [...this.state.images];
+        for (var i = 0; i < list.length; i++) {
+            console.log(list[i]);
+            console.log(reference);
+            if(list[i].reference == reference){
+                console.log('changing done state on the images')
+                list[i].done = true;
+            }
         }
+        this.setState({
+            images: list
+        })
     }
     //Updates the store so their images are updated correctly
     updateStoreImages(reference){
@@ -97,10 +105,10 @@ class Game extends React.Component{
         var imagesAndPrices = [...this.props.config.imagesAndPrices];
         var indexOf = imagesAndPrices.indexOf(reference);
 
-        reference = imagesAndPrices.splice(indexOf, 1);
-        reference[0].done = true;
+        var ref = imagesAndPrices.splice(indexOf, 1);
+        ref[0].done = true;
 
-        imagesAndPrices.splice(indexOf, 0, reference[0]);
+        imagesAndPrices.splice(indexOf, 0, ref[0]);
 
         this.props.updateImages(imagesAndPrices);
     }
@@ -112,6 +120,10 @@ class Game extends React.Component{
                 this.cardsDone();
             } else {
                 setTimeout(() => {this.turnCards();}, 750);
+                this.setState({
+                    modal: true,
+                    authenticate: this.getPasswordObjectIncorrect
+                })
             }
         }
     }
@@ -136,31 +148,11 @@ class Game extends React.Component{
         }
     }
     calculateWidthAndMargin() {
-
-        console.log('Device Height: ', height);
-        console.log('Device Width: ', width);
-        console.log('Amount of Tiles on the X-axis: ', this.props.config.tileX );
-        console.log('Amount of Tiles on the Y-axis: ', this.props.config.tileY );
-
-        var getHeight = height/(this.props.config.tileY + 1);
-        var getWidth = width/(this.props.config.tileX + 1);
-        var getMargin = 15;
-
-        console.log('max height of Tile: ', getHeight);
-        console.log('max width of Tile: ', getWidth);
-
-        if(getHeight > getWidth * 2){
-            getWidth = getHeight;
-            getMargin = getheight;
-        }
-        this.setState({
-            listMargin: getMargin,
-            imageWidth: getWidth
-        })
+        //Here the amount of tiles gets calculated.
     }
     renderImages() {
         var list = this.state.images.map((item, index) => {
-            console.log()
+            console.log(item);
             var binder = this.handleGameItemClick.bind(this, item, index);
             return (
                 <View key={index}>
@@ -168,7 +160,7 @@ class Game extends React.Component{
                         width={this.state.imageWidth}
                         reference={item.image.reference}
                         link={item.image.image}
-                        isDone={item.image.done}
+                        isDone={item.done}
                         onClick={binder}
                         ref={'item'+index}/>
                 </View>
@@ -176,16 +168,23 @@ class Game extends React.Component{
         })
         return list;
     }
-    getPasswordObject(price) {
+    getPasswordObjectIncorrect = {
+        header: 'Jammer, u heeft geen prijs gewonnen.',
+        middleText: 'Probeer het later nog eens',
+        footer: 'Toon dit scherm aan een Euricom medewerker.',
+        password: true,
+        passwordText: 'Unlock',
+    }
+    getPasswordObject(item) {
+        console.log(item);
         return {
             header: 'Gefeliciteerd, U heeft gewonnen!!!',
-            middleText: `Prijs: ${price}`,
+            middleText: `Prijs: ${item.price.price}`,
             footer: 'Toon dit scherm aan een Euricom medewerker',
+            image: item.image.image,
             password: true,
-            passwordText: 'Meld aan',
-            passwordToCheck: '3uric0m',
+            passwordText: 'Unlock',
         }
-
     }
 }
 

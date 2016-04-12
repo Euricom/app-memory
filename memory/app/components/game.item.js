@@ -11,9 +11,10 @@ import { Question } from '../data/data';
 export class GameItem extends React.Component{
     constructor(props){
         super(props);
+
         this.state={
-            active: false,
-            done: false,
+            active: this.props.isDone,
+            done: this.props.isDone,
         }
     }
 
@@ -77,4 +78,5 @@ GameItem.propTypes = {
     link: React.PropTypes.number.isRequired,
     onClick: React.PropTypes.func.isRequired,
     width: React.PropTypes.number.isRequired,
+    isDone: React.PropTypes.bool.isRequired,
 }

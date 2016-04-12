@@ -23,16 +23,21 @@ const styles = StyleSheet.create({
     },
     image: {
         borderRadius: 65,
-        marginTop: 65,
+        marginTop: 15,
         padding: 10,
         alignSelf: 'center',
         justifyContent: 'center',
+        height: 464,
+        width: 256,
     },
     button: {
         borderRadius: 65,
-        marginTop: 65,
+        marginTop: 15,
         height: 65,
+        width: 450,
         backgroundColor: 'green',
+        justifyContent: 'center',
+        alignSelf: 'center',
     },
     buttonText: {
         padding: 10,
@@ -64,23 +69,23 @@ class Main extends React.Component{
                     source={Logo}/>
                 <TouchableHighlight
                     style={styles.button}
-                    onPress={this.handleCreate.bind(this)}
+                    onPress={this.handleToSetup.bind(this)}
                     underlayColor='white'>
-                    <Text style={styles.buttonText}> New game </Text>
+                    <Text style={styles.buttonText}> Configuratie </Text>
                 </TouchableHighlight>
                 <TouchableHighlight
                     style={styles.button}
-                    onPress={this.handleContinue.bind(this)}
+                    onPress={this.handleToGame.bind(this)}
                     underlayColor='white'>
-                    <Text style={styles.buttonText}> Continue Memory </Text>
+                    <Text style={styles.buttonText}> Spelen </Text>
                 </TouchableHighlight>
             </View>
         )
     }
-    handleCreate(){
+    handleToSetup(){
         this.setState({
             authenticator: true,
-            authenticate: this.getPasswordObject,
+            authenticate: this.getPasswordObjectForSetup,
             whereTo: 'config'
         })
     }
@@ -118,37 +123,43 @@ class Main extends React.Component{
             authenticate: {},
         })
     }
-    handleContinue(){
+    handleToGame(){
         if(this.props.config.imagesAndPrices !== undefined
             && this.props.config.imagesAndPrices.length > 0) {
             this.setState({
                 authenticator: true,
-                authenticate: this.getPasswordObject,
+                authenticate: this.getPasswordObjectForGame,
                 whereTo: 'game'
             })
         }
         else {
             this.setState({
                 authenticator: true,
-                authenticate: this.getPasswordObjectForEmtyConfig,
+                authenticate: this.getPasswordObjectForEmptyConfig,
                 whereTo: 'config'
             })
         }
     }
 
-    getPasswordObjectForEmtyConfig = {
-        header: 'Er is nog geen setup aanwezig. Geef het wachtwoord om verder te gaan.',
+    getPasswordObjectForEmptyConfig = {
+        header: 'Er is nog geen setup aanwezig.',
+        middleText: 'Geef het wachtwoord om een setup aan te maken.',
         password: true,
         passwordText: 'Ga verder',
-        passwordToCheck: '3uric0m',
         closeText: 'Sluiten',
     }
-
-    getPasswordObject = {
-        header: 'Geef het wachtwoord',
+    getPasswordObjectForGame = {
+        header: 'Spelen!',
+        middleText: 'Geef het wachtwoord',
         password: true,
         passwordText: 'Ga verder',
-        passwordToCheck: '3uric0m',
+        closeText: 'Sluiten',
+    }
+    getPasswordObjectForSetup = {
+        header: 'Configuratie',
+        middleText: 'Geef het wachtwoord',
+        password: true,
+        passwordText: 'Ga verder',
         closeText: 'Sluiten',
     }
 }

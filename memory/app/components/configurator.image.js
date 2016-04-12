@@ -10,29 +10,29 @@ import question from '../data/question.jpg';
 
 const styles = StyleSheet.create({
     button:{
-        height: 47,
-        width: 47,
+        height: 75,
+        width: 75,
         flexWrap: 'wrap',
         margin:2,
     },
     activeButton: {
         margin: 2,
         borderRadius: 10,
-        height: 47,
-        width: 47,
+        height: 75,
+        width: 75,
         flexWrap: 'wrap',
         borderColor: 'green',
-        borderWidth: 2,
+        borderWidth: 5,
     },
     image: {
         borderRadius: 10,
-        height: 47,
-        width: 47,
+        height: 75,
+        width: 75,
     },
     activeImage: {
         borderRadius: 8,
-        height: 43,
-        width: 43,
+        height: 65,
+        width: 65,
     }
 })
 

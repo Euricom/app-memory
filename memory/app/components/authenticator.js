@@ -17,7 +17,8 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         padding: 20,
-        alignItems: 'center'
+        alignItems: 'center',
+        marginTop: 15,
     },
     innerContainer: {
         borderRadius: 10,
@@ -76,7 +77,12 @@ export class Authenticator extends React.Component{
             animated: true,
             transparent: true,
             inputValue: '',
+            focusDescriptionInput: true,
         };
+    }
+    onComponentDidMount(){
+        console.log('mounting');
+        this.refs.InputField.focus();
     }
 
     render() {
@@ -149,6 +155,7 @@ export class Authenticator extends React.Component{
         if(this.props.modalValues.closeText){
             return(
                 <TouchableHighlight
+                  keyboardType='numeric'
                   onPress={this.close.bind(this)}
                   style={styles.button}>
                   <Text style={styles.buttonText}>{this.props.modalValues.closeText}</Text>
@@ -162,15 +169,12 @@ export class Authenticator extends React.Component{
             return (
                 <View>
                     <TextInput
+                        ref='InputField'
+                        autoFocus={this.state.focusDescriptionInput}
                         secureTextEntry={true}
                         style={styles.input}
                         value={this.state.textValue}
                         onChange={this.handleInput.bind(this)}/>
-                    <TouchableHighlight
-                      onPress={this.checkPassword.bind(this)}
-                      style={styles.button}>
-                      <Text style={styles.buttonText}>{this.props.modalValues.passwordText}</Text>
-                    </TouchableHighlight>
                 </View>
             )
         }
@@ -194,6 +198,7 @@ export class Authenticator extends React.Component{
         this.setState({
             inputValue: event.nativeEvent.text
         })
+        this.checkPassword();
     }
 }
 

@@ -5,7 +5,8 @@ const initialState = {
     question: {},
     tiles: 0,
     imagesAndPrices: [],
-    winner: {}
+    winner: {},
+    shuffledImages: []
 }
 
 export default function config(state = initialState, action = {}) {
@@ -15,7 +16,6 @@ export default function config(state = initialState, action = {}) {
                 ...state,
                 imagesAndPrices: action.payload.imagesAndPrices
             };
-            break;
         case types.UPDATE_CONFIG:
             return {
                 ...state,
@@ -23,20 +23,27 @@ export default function config(state = initialState, action = {}) {
                 tiles: action.payload.tiles,
                 imagesAndPrices: action.payload.imagesAndPrices,
             };
-            break;
         case types.UPDATE_CONFIG_WINNER:
-        return {
-            ...state,
-            winner: action.payload.winner
-        }
-            break;
+            return {
+                ...state,
+                winner: action.payload.winner
+            }
+        case types.SAVE_SHUFFLEDIMAGES:
+            return {
+                ...state,
+                shuffledImages: action.payload.images,
+            }
+        case types.SAVE_NEWSHUFFLEDIMAGES:
+            return {
+                ...state,
+                imagesAndPrices: action.payload.images,
+                shuffledImages: action.payload.shuffledImages,
+            }
         case types.SAVE_STORAGE:
             WriteToStorage(state);
             return state;
-            break;
         case types.UPLOAD_STORAGE:
             return GetStateFromStorage();
-            break;
         default:
             return state;
     }
@@ -48,6 +55,7 @@ function WriteToStorage(state){
     AsyncStorage.setItem("questionImage", JSON.stringify(state.question));
     AsyncStorage.setItem("imagesAndPrices", JSON.stringify(state.imagesAndPrices));
     AsyncStorage.setItem("winner", JSON.stringify(state.winner));
+    AsyncStorage.setItem("shuffledImages", JSON.stringify(state.shuffledImages));
 }
 
 function GetStateFromStorage(){
@@ -56,7 +64,8 @@ function GetStateFromStorage(){
         question: {},
         tiles: 0,
         imagesAndPrices: [],
-        winner: {}
+        winner: {},
+        shuffledImages: [],
     };
 
     AsyncStorage.getItem("tiles").then((value) => {
@@ -78,6 +87,11 @@ function GetStateFromStorage(){
             console.log(value);
             state.winner = JSON.parse(value);
             console.log(state.winner);
+        }).done();
+    AsyncStorage.getItem("shuffledImages").then((value) => {
+            console.log(value);
+            state.shuffledImages = JSON.parse(value);
+            console.log(state.shuffledImages);
         }).done();
     return state;
 }

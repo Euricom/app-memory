@@ -30,7 +30,7 @@ import img_28 from './img_28.png';
 import img_29 from './img_29.png';
 import logo from './logo.png';
 import question from './question.jpg';
-export const pw = '3uric0m';
+export const pw = '5374';
 
 export const Logo = logo;
 export const Question = question;

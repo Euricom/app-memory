@@ -34,3 +34,15 @@ export function UpdateConfigWinnerAction(winner){
         payload: {winner}
     }
 }
+export function SaveShuffledImagesAction(images){
+    return {
+        type: types.SAVE_SHUFFLEDIMAGES,
+        payload: {images}
+    }
+}
+export function SaveNewShuffledImagesAction(images, shuffledImages){
+    return {
+        type: types.SAVE_NEWSHUFFLEDIMAGES,
+        payload: {images, shuffledImages}
+    }
+}

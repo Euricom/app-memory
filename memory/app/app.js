@@ -35,7 +35,8 @@ export class App extends Component {
                 initialRoute={{
                 title: 'Memory',
                 component: Main,
-                }}>
+                }}
+                navigationBarHidden={true}>
             </NavigatorIOS>
         </Provider>
     );

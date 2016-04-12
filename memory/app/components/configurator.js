@@ -18,6 +18,7 @@ import { UpdateConfigAction, SaveStorageAction } from '../actions/config.actions
 
 // import { ImagePickerManager } from 'NativeModules';
 import { ConfiguratorImage } from './configurator.image';
+import { BrowseImage } from './browseImage';
 import { getImages, Question } from '../data/data';
 
 const imageitem = 'image';
@@ -101,7 +102,10 @@ class Configurator extends React.Component{
                     <Text style={styles.text}>Default question image: </Text>
                 </View>
                 <View style={styles.list}>
-                    <Image style={styles.image} source={this.state.question}/>
+                    <BrowseImage
+                        width={150}
+                        image={this.state.question}
+                        onClick={this.onQuestionImageClick.bind(this)}/>
                 </View>
                 <View
                     style={styles.rowContainer}>
@@ -126,10 +130,6 @@ class Configurator extends React.Component{
                 <View style={styles.list}>
                     {this.showImages()}
                 </View>
-                <Text>Te behalen prijzen</Text>
-                <View>
-                    {this.showPrices()}
-                </View>
                 <View
                     style={styles.rowContainer}>
                     <TouchableHighlight
@@ -141,6 +141,11 @@ class Configurator extends React.Component{
                 </View>
             </ScrollView>
         )
+    }
+    onQuestionImageClick(image){
+        this.setState({
+            question: image
+        })
     }
     saveToState(){
         var imagesAndPrices = [];
@@ -163,9 +168,19 @@ class Configurator extends React.Component{
 
     handleOnTileChange(event){
         this.setState({
-            tiles: parseInt(event.nativeEvent.text === ''? 0 : event.nativeEvent.text)
+            tiles: parseInt(event.nativeEvent.text === '' ? 0 : event.nativeEvent.text)
         })
-        // this.setTiles();
+        //Check if value not bigger then 60
+        if(this.state.tiles % 2 > 0){
+            this.setState({
+                tiles: this.state.tiles - 1
+            })
+        }
+        if(this.state.tiles > 60){
+            this.setState({
+                tiles: 60
+            })
+        }
     }
     showPrices(){
         var list = this.state.activePrices.map((item, index) => {

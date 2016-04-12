@@ -6,4 +6,4 @@ const rootReducer = combineReducers({
   config,
 })
 
-export default rootReducer
+export default rootReducer;

@@ -14,11 +14,12 @@ import
     {
         UpdateConfigImageAction,
         SaveStorageAction,
-        UpdateConfigWinnerAction
+        UpdateConfigWinnerAction,
+        SaveShuffledImagesAction
     }
     from '../actions/config.actions';
 
-import { getImagesShuffledAndDoubled } from '../data/data';
+
 import { Authenticator } from './authenticator';
 import { GameItem } from './game.item';
 
@@ -26,24 +27,38 @@ const {height, width} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 65,
+        marginTop: 15,
         flex: 1,
+    },
+    button: {
+        borderRadius: 65,
+        marginTop: 15,
+        height: 35,
+        width: 150,
+        backgroundColor: 'green',
         justifyContent: 'center',
     },
+    buttonText: {
+        padding: 5,
+        fontSize: 16,
+        color: 'white',
+        alignSelf: 'center'
+    }
 })
 
 class Game extends React.Component{
     constructor(props){
         super(props);
 
-        //var p = this.calculateWidthAndMargin();
+        var p = this.calculateWidthAndMargin();
         this.state = {
             modal: false,
             authenticate: {},
             references: [], //those that are being handled
-            images: getImagesShuffledAndDoubled(this.props.config.imagesAndPrices),
-            imageWidth: 150, //p.imageWidth,
-            listMargin: 15,  // p.listMargin
+            images: this.props.images,
+            imageWidth: p.imageWidth,
+            listMargin: p.listMargin,
+            back: false,
         }
     }
     render(){
@@ -53,16 +68,37 @@ class Game extends React.Component{
                     modalVisible={this.state.modal}
                     modalValues={this.state.authenticate}
                     onEnter={this.onEnter.bind(this)}/>
+                <TouchableHighlight
+                    style={styles.button}
+                    onPress={this.handleBack.bind(this)}
+                    underlayColor='white'>
+                    <Text style={styles.buttonText}> Ga terug </Text>
+                </TouchableHighlight>
                 <View style={this.calculateStyle()}>
                     {this.renderImages()}
                 </View>
             </View>
         )
     }
+    handleBack(){
+        this.setState({
+            modal: true,
+            authenticate: this.getPasswordObjectForBack,
+            back: true,
+        })
+    }
     onEnter(ret){
         if(this.props.config.winner !== {} && this.props.config.winner !== undefined){
             this.props.updateWinner({});
             this.props.saveStorage();
+        }
+        if(this.state.back ){
+            this.setState({
+                back: false
+            })
+            if(ret){
+                this.props.navigator.pop();
+            }
         }
         this.setState({
             modal: false
@@ -83,8 +119,14 @@ class Game extends React.Component{
             modal: true,
             authenticate: this.getPasswordObject(storeReference)
         })
+        //update the state images
         this.updateStateImages(storeReference);
+
+        //update the store
         this.updateStoreImages(storeReference);
+
+        //update the AsyncStorage with the new store
+        this.props.saveStorage();
 
         this.setState({
             references: []
@@ -100,7 +142,9 @@ class Game extends React.Component{
         this.setState({
             images: list
         })
+        this.props.saveShuffledImages(list);
     }
+
     //Updates the store so their images are updated correctly
     updateStoreImages(reference){
 
@@ -117,21 +161,19 @@ class Game extends React.Component{
 
         //update the store winner
         this.props.updateWinner(reference);
-
-        //update the AsyncStorage
-        this.props.saveStorage();
     }
 
     checkMemory(){
         if(this.state.references.length === 2){
-            if(this.state.references[0].item === this.state.references[1].item){
+
+            if(this.state.references[0].item.image.reference === this.state.references[1].item.image.reference){
                 this.cardsDone();
             } else {
-                setTimeout(() => {this.turnCards();}, 750);
                 this.setState({
                     modal: true,
                     authenticate: this.getPasswordObjectIncorrect
                 })
+                setTimeout(() => {this.turnCards();}, 3500);
             }
         }
     }
@@ -146,7 +188,6 @@ class Game extends React.Component{
         this.checkMemory();
     }
     calculateStyle(){
-
         return {
             marginTop: 65,
             marginLeft: this.state.listMargin,
@@ -156,7 +197,40 @@ class Game extends React.Component{
         }
     }
     calculateWidthAndMargin() {
-        //Here the amount of tiles gets calculated.
+        if(this.props.config.tiles <= 12)
+        {
+            return {
+                imageWidth: 200,
+                listMargin: 25,
+            }
+        }
+        else if(this.props.config.tiles <= 24){
+            return {
+                imageWidth: 150,
+                listMargin: 15,
+            }
+        }
+        else if(this.props.config.tiles <= 30){
+            return {
+                imageWidth: 125,
+                listMargin: 5,
+            }
+        } else if(this.props.config.tiles <= 40){
+            return {
+                imageWidth: 115,
+                listMargin: 5,
+            }
+        } else if(this.props.config.tiles <= 54){
+            return {
+                imageWidth: 100,
+                listMargin: 5,
+            }
+        } else {
+            return {
+                imageWidth: 90,
+                listMargin: 5,
+            }
+        }
     }
     renderImages() {
         var list = this.state.images.map((item, index) => {
@@ -185,12 +259,16 @@ class Game extends React.Component{
     getPasswordObject(item) {
         return {
             header: 'Gefeliciteerd, U heeft gewonnen!!!',
-            middleText: `Prijs: ${item.price.price}`,
+            // middleText: `Prijs: ${item.price.price}`,
             footer: 'Toon dit scherm aan een Euricom medewerker',
             image: item.image.image,
             password: true,
-            passwordText: 'Unlock',
         }
+    }
+    getPasswordObjectForBack = {
+        header: 'Geef het wachtwoord',
+        password: true,
+        closeText: 'Sluiten',
     }
 }
 
@@ -210,6 +288,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         saveStorage: () => {
             dispatch(SaveStorageAction())
+        },
+        saveShuffledImages: (images) => {
+            dispatch(SaveShuffledImagesAction(images))
         }
     }
 }

@@ -10,7 +10,7 @@ import React,
 
 import { connect } from 'react-redux';
 
-import { Logo } from '../data/data';
+import { Logo, getImagesShuffledAndDoubled } from '../data/data';
 import { Authenticator } from './authenticator';
 import Configurator from './configurator';
 import Game from './game';
@@ -18,7 +18,8 @@ import
     {
         UploadStorageAction,
         UpdateConfigWinnerAction,
-        SaveStorageAction
+        SaveStorageAction,
+        SaveNewShuffledImagesAction
     }
     from '../actions/config.actions';
 
@@ -34,8 +35,8 @@ const styles = StyleSheet.create({
         padding: 10,
         alignSelf: 'center',
         justifyContent: 'center',
-        height: 464,
-        width: 256,
+        height: 406,
+        width: 224,
     },
     button: {
         borderRadius: 65,
@@ -87,12 +88,18 @@ class Main extends React.Component{
                     style={styles.button}
                     onPress={this.handleToGame.bind(this)}
                     underlayColor='white'>
-                    <Text style={styles.buttonText}> Spelen </Text>
+                    <Text style={styles.buttonText}> Nieuw spel </Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                    style={styles.button}
+                    onPress={this.handleToExistingGame.bind(this)}
+                    underlayColor='white'>
+                    <Text style={styles.buttonText}> Verder spelen </Text>
                 </TouchableHighlight>
             </View>
         )
     }
-    
+
     handleToSetup(){
         this.setState({
             authenticator: true,
@@ -126,10 +133,20 @@ class Main extends React.Component{
                     component: Configurator
                 })
                 break;
-            case 'game':
+            case 'newGame':
+                this.ReshuffleValues();
+
                 this.props.navigator.push({
                     title: 'Memories Game',
-                    component: Game
+                    component: Game,
+                    passProps: {images: this.props.config.shuffledImages}
+                });
+                break;
+            case 'existingGame':
+                this.props.navigator.push({
+                    title: 'Memories Game',
+                    component: Game,
+                    passProps: { images: this.props.config.shuffledImages }
                 })
                 break;
         }
@@ -138,7 +155,19 @@ class Main extends React.Component{
             authenticate: {},
         })
     }
-    handleToGame(){
+    ReshuffleValues(){
+        var list = [...this.props.config.imagesAndPrices];
+        for (var i = 0; i < list.length; i++) {
+            list[i].done = false;
+        }
+
+        var shuffled = getImagesShuffledAndDoubled(list);
+        //save the values in the store
+        this.props.reShuffle(list, shuffled);
+        //save the the new store inside the storage
+        this.props.saveStorage();
+    }
+    handleToExistingGame() {
         if(this.props.config.winner !== null
             && this.props.config.winner !== undefined
             && this.props.config.winner.image !== undefined){
@@ -148,12 +177,39 @@ class Main extends React.Component{
             })
         }
         else if(this.props.config.imagesAndPrices !== undefined
+            && this.props.config.imagesAndPrices !== null
             && this.props.config.imagesAndPrices.length > 0) {
             this.setState({
-                authenticator: true,
-                authenticate: this.getPasswordObjectForGame,
-                whereTo: 'game'
+                whereTo: 'existingGame'
             })
+            this.pushTo();
+        }
+        else {
+            this.setState({
+                authenticator: true,
+                authenticate: this.getPasswordObjectForEmptyConfig,
+                whereTo: 'config'
+            })
+        }
+    }
+    handleToGame() {
+        if(this.props.config.winner !== null
+            && this.props.config.winner !== undefined
+            && this.props.config.winner.image !== undefined){
+            this.setState({
+                authenticator: true,
+                authenticate: this.getPasswordObject(this.props.config.winner)
+            })
+        }
+        else if(this.props.config.imagesAndPrices !== undefined
+            && this.props.config.imagesAndPrices !== null
+            && this.props.config.imagesAndPrices.length > 0) {
+            this.setState({
+                // authenticator: true,
+                // authenticate: this.getPasswordObjectForGame,
+                whereTo: 'newGame'
+            })
+            this.pushTo();
         }
         else {
             this.setState({
@@ -166,11 +222,10 @@ class Main extends React.Component{
     getPasswordObject(item) {
         return {
             header: 'Gefeliciteerd, U heeft gewonnen!!!',
-            middleText: `Prijs: ${item.price.price}`,
+            // middleText: `Prijs: ${item.price.price}`,
             footer: 'Toon dit scherm aan een Euricom medewerker',
             image: item.image.image,
             password: true,
-            passwordText: 'Unlock',
         }
     }
     getPasswordObjectForEmptyConfig = {
@@ -184,14 +239,12 @@ class Main extends React.Component{
         header: 'Spelen!',
         middleText: 'Geef het wachtwoord',
         password: true,
-        passwordText: 'Ga verder',
         closeText: 'Sluiten',
     }
     getPasswordObjectForSetup = {
         header: 'Configuratie',
         middleText: 'Geef het wachtwoord',
         password: true,
-        passwordText: 'Ga verder',
         closeText: 'Sluiten',
     }
 }
@@ -212,6 +265,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         saveStorage: () => {
             dispatch(SaveStorageAction())
+        },
+        reShuffle: (images, shuffledImages) => {
+            dispatch(SaveNewShuffledImagesAction(images, shuffledImages))
         }
     }
 }

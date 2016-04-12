@@ -17,3 +17,20 @@ export function UpdateConfigImageAction(imagesAndPrices){
         payload: {imagesAndPrices}
     }
 }
+
+export function SaveStorageAction(){
+    return {
+        type: types.SAVE_STORAGE
+    }
+}
+export function UploadStorageAction(){
+    return {
+        type: types.UPLOAD_STORAGE
+    }
+}
+export function UpdateConfigWinnerAction(winner){
+    return {
+        type: types.UPDATE_CONFIG_WINNER,
+        payload: {winner}
+    }
+}

@@ -14,7 +14,7 @@ import React,
 
 import { connect } from 'react-redux';
 
-import { UpdateConfigAction } from '../actions/config.actions';
+import { UpdateConfigAction, SaveStorageAction } from '../actions/config.actions';
 
 // import { ImagePickerManager } from 'NativeModules';
 import { ConfiguratorImage } from './configurator.image';
@@ -143,7 +143,6 @@ class Configurator extends React.Component{
         )
     }
     saveToState(){
-        console.log('data should now be saved onto the store');
         var imagesAndPrices = [];
         for (var i = 0; i < this.getTileToImageCount(); i++) {
             var ob = {
@@ -153,11 +152,12 @@ class Configurator extends React.Component{
             }
             imagesAndPrices.push(ob);
         }
-        console.log(imagesAndPrices);
         this.props.updateConfig(
             this.state.question,
             this.state.tiles,
             imagesAndPrices);
+        this.props.saveInStore();
+
         this.props.navigator.pop();
     }
 
@@ -226,7 +226,6 @@ class Configurator extends React.Component{
         })
     }
     addImageToState(item, index, add){
-        // this.refs['item'+ i].setActiveState(true);
 
         let images = [];
         images.push(...this.state.activeImages);
@@ -325,6 +324,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         updateConfig: (question, tiles, imagesAndPrices) => {
             dispatch(UpdateConfigAction(question, tiles, imagesAndPrices))
+        },
+        saveInStore: ()=> {
+            dispatch(SaveStorageAction())
         }
     }
 }

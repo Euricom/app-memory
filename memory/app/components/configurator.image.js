@@ -55,10 +55,6 @@ export class ConfiguratorImage extends React.Component{
                         source={this.props.item.image}
                         resizeMode='stretch'/>
                 </TouchableHighlight>
-                <TextInput
-                    style={styles.input}
-                    value={this.state.tiles.toString()}
-                    onChange={this.handleOnTileChange.bind(this)}/>
             </View>
         )
     }

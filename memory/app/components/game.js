@@ -10,7 +10,13 @@ import React,
 
 import { connect } from 'react-redux';
 
-import { UpdateConfigImageAction } from '../actions/config.actions';
+import
+    {
+        UpdateConfigImageAction,
+        SaveStorageAction,
+        UpdateConfigWinnerAction
+    }
+    from '../actions/config.actions';
 
 import { getImagesShuffledAndDoubled } from '../data/data';
 import { Authenticator } from './authenticator';
@@ -54,12 +60,15 @@ class Game extends React.Component{
         )
     }
     onEnter(ret){
+        if(this.props.config.winner !== {} && this.props.config.winner !== undefined){
+            this.props.updateWinner({});
+            this.props.saveStorage();
+        }
         this.setState({
             modal: false
         })
     }
     turnCards(){
-        console.log(this.state.references);
         for (var i = 0; i < this.state.references.length; i++) {
             var index = this.state.references[i].index;
             this.refs['item'+ index].setUnactive();
@@ -70,17 +79,13 @@ class Game extends React.Component{
     }
     cardsDone(){
         var storeReference = this.state.references[0].item;
-        console.log(storeReference);
         this.setState({
             modal: true,
             authenticate: this.getPasswordObject(storeReference)
         })
         this.updateStateImages(storeReference);
         this.updateStoreImages(storeReference);
-        // for (var i = 0; i < this.state.references.length; i++) {
-        //     var index = this.state.references[i].index;
-        //     this.refs['item'+ index].setDone();
-        // }
+
         this.setState({
             references: []
         })
@@ -88,10 +93,7 @@ class Game extends React.Component{
     updateStateImages(reference){
         var list = [...this.state.images];
         for (var i = 0; i < list.length; i++) {
-            console.log(list[i]);
-            console.log(reference);
             if(list[i].reference == reference){
-                console.log('changing done state on the images')
                 list[i].done = true;
             }
         }
@@ -110,12 +112,18 @@ class Game extends React.Component{
 
         imagesAndPrices.splice(indexOf, 0, ref[0]);
 
+        //update the store
         this.props.updateImages(imagesAndPrices);
+
+        //update the store winner
+        this.props.updateWinner(reference);
+
+        //update the AsyncStorage
+        this.props.saveStorage();
     }
 
     checkMemory(){
         if(this.state.references.length === 2){
-            // check their values
             if(this.state.references[0].item === this.state.references[1].item){
                 this.cardsDone();
             } else {
@@ -152,7 +160,6 @@ class Game extends React.Component{
     }
     renderImages() {
         var list = this.state.images.map((item, index) => {
-            console.log(item);
             var binder = this.handleGameItemClick.bind(this, item, index);
             return (
                 <View key={index}>
@@ -176,7 +183,6 @@ class Game extends React.Component{
         passwordText: 'Unlock',
     }
     getPasswordObject(item) {
-        console.log(item);
         return {
             header: 'Gefeliciteerd, U heeft gewonnen!!!',
             middleText: `Prijs: ${item.price.price}`,
@@ -198,6 +204,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         updateImages: (images) => {
             dispatch(UpdateConfigImageAction(images))
+        },
+        updateWinner: (winner) => {
+            dispatch(UpdateConfigWinnerAction(winner))
+        },
+        saveStorage: () => {
+            dispatch(SaveStorageAction())
         }
     }
 }

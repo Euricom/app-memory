@@ -14,6 +14,13 @@ import { Logo } from '../data/data';
 import { Authenticator } from './authenticator';
 import Configurator from './configurator';
 import Game from './game';
+import
+    {
+        UploadStorageAction,
+        UpdateConfigWinnerAction,
+        SaveStorageAction
+    }
+    from '../actions/config.actions';
 
 const styles = StyleSheet.create({
     container: {
@@ -57,6 +64,9 @@ class Main extends React.Component{
             authenticate: {}
         }
     }
+    componentDidMount(){
+        this.props.uploadStorage();
+    }
     render(){
         return (
             <View style={styles.container}>
@@ -82,6 +92,7 @@ class Main extends React.Component{
             </View>
         )
     }
+    
     handleToSetup(){
         this.setState({
             authenticator: true,
@@ -90,6 +101,10 @@ class Main extends React.Component{
         })
     }
     onEnter(open){
+        if(this.props.config.winner !== {} && this.props.config.winner !== undefined){
+            this.props.updateWinner({});
+            this.props.saveStorage();
+        }
         if(open){
             this.setState ({
                 authenticator: false,
@@ -124,7 +139,15 @@ class Main extends React.Component{
         })
     }
     handleToGame(){
-        if(this.props.config.imagesAndPrices !== undefined
+        if(this.props.config.winner !== null
+            && this.props.config.winner !== undefined
+            && this.props.config.winner.image !== undefined){
+            this.setState({
+                authenticator: true,
+                authenticate: this.getPasswordObject(this.props.config.winner)
+            })
+        }
+        else if(this.props.config.imagesAndPrices !== undefined
             && this.props.config.imagesAndPrices.length > 0) {
             this.setState({
                 authenticator: true,
@@ -140,7 +163,16 @@ class Main extends React.Component{
             })
         }
     }
-
+    getPasswordObject(item) {
+        return {
+            header: 'Gefeliciteerd, U heeft gewonnen!!!',
+            middleText: `Prijs: ${item.price.price}`,
+            footer: 'Toon dit scherm aan een Euricom medewerker',
+            image: item.image.image,
+            password: true,
+            passwordText: 'Unlock',
+        }
+    }
     getPasswordObjectForEmptyConfig = {
         header: 'Er is nog geen setup aanwezig.',
         middleText: 'Geef het wachtwoord om een setup aan te maken.',
@@ -172,9 +204,15 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        // sayHello: () => {
-        //     dispatch({type: 'getData', payload: 'Hello'})
-        // }
+        uploadStorage: () => {
+            dispatch(UploadStorageAction())
+        },
+        updateWinner:(winner)=> {
+            dispatch(UpdateConfigWinnerAction(winner))
+        },
+        saveStorage: () => {
+            dispatch(SaveStorageAction())
+        }
     }
 }
 

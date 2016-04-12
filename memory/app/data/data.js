@@ -100,7 +100,6 @@ export function getImagesShuffledAndDoubledByAmount(amount){
     //Shuffle the list to select different pictures
     shuffle(list);
     var toReturn = list.slice(0,amount);
-    console.log(toReturn)
 
     return getImagesShuffledAndDoubled(toReturn);
 }

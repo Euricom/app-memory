@@ -68,30 +68,22 @@ function GetStateFromStorage(){
         shuffledImages: [],
     };
 
-    AsyncStorage.getItem("tiles").then((value) => {
-            console.log('value of tiles: ',value);
+    AsyncStorage.getItem("tiles")
+        .then((value) => {
             state.tiles = parseInt(value);
-            console.log(state.tiles);
-        }).done();
+        })
+        .done();
     AsyncStorage.getItem("questionImage").then((value) => {
-            console.log(value);
             state.question = JSON.parse(value);
-            console.log(state.question);
         }).done();
     AsyncStorage.getItem("imagesAndPrices").then((value) => {
-            console.log(value);
             state.imagesAndPrices = JSON.parse(value);
-            console.log(state.imagesAndPrices);
         }).done();
     AsyncStorage.getItem("winner").then((value) => {
-            console.log(value);
             state.winner = JSON.parse(value);
-            console.log(state.winner);
         }).done();
     AsyncStorage.getItem("shuffledImages").then((value) => {
-            console.log(value);
             state.shuffledImages = JSON.parse(value);
-            console.log(state.shuffledImages);
         }).done();
     return state;
 }

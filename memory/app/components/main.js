@@ -1,5 +1,5 @@
-import React,
-    {
+/* eslint-disable react/jsx-indent-props, react/jsx-no-bind, react/prop-types, react/sort-comp */
+import React, {
         View,
         Text,
         Image,
@@ -14,14 +14,13 @@ import { Logo, getImagesShuffledAndDoubled } from '../data/data';
 import { Authenticator } from './authenticator';
 import Configurator from './configurator';
 import Game from './game';
-import
-    {
-        UploadStorageAction,
-        UpdateConfigWinnerAction,
-        SaveStorageAction,
-        SaveNewShuffledImagesAction
-    }
-    from '../actions/config.actions';
+
+import {
+    uploadStorageAction,
+    updateConfigWinnerAction,
+    saveStorageAction,
+    saveNewShuffledImagesAction,
+} from '../actions/config.actions';
 
 const styles = StyleSheet.create({
     container: {
@@ -53,225 +52,211 @@ const styles = StyleSheet.create({
         color: 'white',
         alignSelf: 'center',
         justifyContent: 'center',
-    }
-})
+    },
+});
 
-class Main extends React.Component{
-    constructor(props){
+class Main extends React.Component {
+    constructor(props) {
         super(props);
         this.state = {
-            authenticator: false,
+            authenticator: true,
             whereTo: '',
-            authenticate: {}
-        }
+            authenticate: this.getPasswordObject(),
+        };
     }
-    componentDidMount(){
+    componentDidMount() {
+        /* eslint-disable react/prop-types */
         this.props.uploadStorage();
+        /* eslint-enable react/prop-types */
     }
-    render(){
+
+    render() {
         return (
             <View style={styles.container}>
                 <Authenticator
                     modalVisible={this.state.authenticator}
                     modalValues = { this.state.authenticate}
-                    onEnter={this.onEnter.bind(this)}/>
+                    onEnter={this.onEnter.bind(this)}
+                />
                 <Image
                     style={styles.image}
-                    source={Logo}/>
+                    source={Logo}
+                />
                 <TouchableHighlight
                     style={styles.button}
                     onPress={this.handleToSetup.bind(this)}
-                    underlayColor='white'>
+                    underlayColor="white"
+                >
                     <Text style={styles.buttonText}> Configuratie </Text>
                 </TouchableHighlight>
                 <TouchableHighlight
                     style={styles.button}
                     onPress={this.handleToGame.bind(this)}
-                    underlayColor='white'>
+                    underlayColor="white"
+                >
                     <Text style={styles.buttonText}> Nieuw spel </Text>
                 </TouchableHighlight>
                 <TouchableHighlight
                     style={styles.button}
                     onPress={this.handleToExistingGame.bind(this)}
-                    underlayColor='white'>
+                    underlayColor="white"
+                >
                     <Text style={styles.buttonText}> Verder spelen </Text>
                 </TouchableHighlight>
             </View>
-        )
+        );
     }
 
-    handleToSetup(){
-        this.setState({
-            authenticator: true,
-            authenticate: this.getPasswordObjectForSetup,
-            whereTo: 'config'
-        })
-    }
-    onEnter(open){
-        if(this.props.config.winner !== {} && this.props.config.winner !== undefined){
+    onEnter(open) {
+        if (this.props.config.winner !== {} && this.props.config.winner !== undefined) {
             this.props.updateWinner({});
             this.props.saveStorage();
         }
-        if(open){
-            this.setState ({
+        if (open) {
+            this.setState({
                 authenticator: false,
-            })
+            });
             this.pushTo();
         } else {
-            this.setState ({
+            this.setState({
                 authenticator: false,
                 authenticate: {},
-                whereTo: ''
-            })
+                whereTo: '',
+            });
         }
     }
-    pushTo(){
-        switch (this.state.whereTo) {
-            case 'config':
-                this.props.navigator.push({
-                    title: 'Configurator',
-                    component: Configurator
-                })
-                break;
-            case 'newGame':
-                this.ReshuffleValues();
 
-                this.props.navigator.push({
-                    title: 'Memories Game',
-                    component: Game,
-                    passProps: {images: this.props.config.shuffledImages}
-                });
-                break;
-            case 'existingGame':
-                this.props.navigator.push({
-                    title: 'Memories Game',
-                    component: Game,
-                    passProps: { images: this.props.config.shuffledImages }
-                })
-                break;
-        }
-        this.setState ({
-            whereTo: '',
-            authenticate: {},
-        })
+    getPasswordObject() {
+        return {
+            header: 'Geef het wachtwoord',
+            password: true,
+        };
     }
-    ReshuffleValues(){
-        var list = [...this.props.config.imagesAndPrices];
-        for (var i = 0; i < list.length; i++) {
+
+    handleToSetup() {
+        this.setState({
+            // authenticator: true,
+            // authenticate: this.getPasswordObjectForSetup,
+            whereTo: 'config',
+        });
+        this.pushTo();
+    }
+
+
+    pushTo() {
+        switch (this.state.whereTo) {
+        case 'config':
+            this.props.navigator.push({
+                title: 'Configurator',
+                component: Configurator,
+            });
+            break;
+        case 'newGame':
+            this.reShuffleValues();
+
+            this.props.navigator.push({
+                title: 'Memories Game',
+                component: Game,
+                passProps: { images: this.props.config.shuffledImages },
+            });
+            break;
+        case 'existingGame':
+            this.props.navigator.push({
+                title: 'Memories Game',
+                component: Game,
+                passProps: { images: this.props.config.shuffledImages },
+            });
+            break;
+        default:
+            break;
+        }
+        this.setState({
+            whereTo: '',
+        });
+    }
+    reShuffleValues() {
+        const list = [...this.props.config.imagesAndPrices];
+        for (let i = 0; i < list.length; i++) {
             list[i].done = false;
         }
 
-        var shuffled = getImagesShuffledAndDoubled(list);
-        //save the values in the store
+        const shuffled = getImagesShuffledAndDoubled(list);
+        // save the values in the store
         this.props.reShuffle(list, shuffled);
-        //save the the new store inside the storage
+        // save the the new store inside the storage
         this.props.saveStorage();
     }
     handleToExistingGame() {
-        if(this.props.config.winner !== null
+        if (this.props.config.winner !== null
             && this.props.config.winner !== undefined
-            && this.props.config.winner.image !== undefined){
+            && this.props.config.winner.image !== undefined) {
             this.setState({
                 authenticator: true,
-                authenticate: this.getPasswordObject(this.props.config.winner)
-            })
-        }
-        else if(this.props.config.imagesAndPrices !== undefined
+                authenticate: this.getPasswordObject(this.props.config.winner),
+            });
+        } else if (this.props.config.imagesAndPrices !== undefined
             && this.props.config.imagesAndPrices !== null
             && this.props.config.imagesAndPrices.length > 0) {
             this.setState({
-                whereTo: 'existingGame'
-            })
+                whereTo: 'existingGame',
+            });
             this.pushTo();
-        }
-        else {
+        } else {
             this.setState({
                 authenticator: true,
                 authenticate: this.getPasswordObjectForEmptyConfig,
-                whereTo: 'config'
-            })
+                whereTo: 'config',
+            });
         }
     }
+
     handleToGame() {
-        if(this.props.config.winner !== null
+        if (this.props.config.winner !== null
             && this.props.config.winner !== undefined
-            && this.props.config.winner.image !== undefined){
+            && this.props.config.winner.image !== undefined) {
             this.setState({
                 authenticator: true,
-                authenticate: this.getPasswordObject(this.props.config.winner)
-            })
-        }
-        else if(this.props.config.imagesAndPrices !== undefined
+                authenticate: this.getPasswordObject(this.props.config.winner),
+            });
+        } else if (this.props.config.imagesAndPrices !== undefined
             && this.props.config.imagesAndPrices !== null
             && this.props.config.imagesAndPrices.length > 0) {
             this.setState({
-                // authenticator: true,
-                // authenticate: this.getPasswordObjectForGame,
-                whereTo: 'newGame'
-            })
+                whereTo: 'newGame',
+            });
+            this.pushTo();
+        } else {
+            this.setState({
+                whereTo: 'config',
+            });
             this.pushTo();
         }
-        else {
-            this.setState({
-                authenticator: true,
-                authenticate: this.getPasswordObjectForEmptyConfig,
-                whereTo: 'config'
-            })
-        }
-    }
-    getPasswordObject(item) {
-        return {
-            header: 'Gefeliciteerd, U heeft gewonnen!!!',
-            // middleText: `Prijs: ${item.price.price}`,
-            footer: 'Toon dit scherm aan een Euricom medewerker',
-            image: item.image.image,
-            password: true,
-        }
-    }
-    getPasswordObjectForEmptyConfig = {
-        header: 'Er is nog geen setup aanwezig.',
-        middleText: 'Geef het wachtwoord om een setup aan te maken.',
-        password: true,
-        passwordText: 'Ga verder',
-        closeText: 'Sluiten',
-    }
-    getPasswordObjectForGame = {
-        header: 'Spelen!',
-        middleText: 'Geef het wachtwoord',
-        password: true,
-        closeText: 'Sluiten',
-    }
-    getPasswordObjectForSetup = {
-        header: 'Configuratie',
-        middleText: 'Geef het wachtwoord',
-        password: true,
-        closeText: 'Sluiten',
     }
 }
-
+/* eslint-disable no-unused-vars, arrow-body-style*/
 const mapStateToProps = (state, ownProps) => {
     return {
-        config: state.config
-    }
-}
+        config: state.config,
+    };
+};
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         uploadStorage: () => {
-            dispatch(UploadStorageAction())
+            dispatch(uploadStorageAction());
         },
-        updateWinner:(winner)=> {
-            dispatch(UpdateConfigWinnerAction(winner))
+        updateWinner: (winner) => {
+            dispatch(updateConfigWinnerAction(winner));
         },
         saveStorage: () => {
-            dispatch(SaveStorageAction())
+            dispatch(saveStorageAction());
         },
         reShuffle: (images, shuffledImages) => {
-            dispatch(SaveNewShuffledImagesAction(images, shuffledImages))
-        }
-    }
-}
-
+            dispatch(saveNewShuffledImagesAction(images, shuffledImages));
+        },
+    };
+};
+/* eslint-enable no-unused-vars, arrow-body-style*/
 export default connect(
     mapStateToProps,
     mapDispatchToProps

@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-indent-props, react/jsx-no-bind, react/prop-types, react/sort-comp */
 import React,
     {
         ScrollView,
@@ -5,41 +6,37 @@ import React,
         Text,
         StyleSheet,
         TouchableHighlight,
-        CameraRoll,
-        NativeModules,
-        Image,
         TextInput,
     }
     from 'react-native';
 
 import { connect } from 'react-redux';
 
-import { UpdateConfigAction, SaveStorageAction } from '../actions/config.actions';
+import {
+    updateConfigAction,
+    saveStorageAction,
+} from '../actions/config.actions';
 
-// import { ImagePickerManager } from 'NativeModules';
 import { ConfiguratorImage } from './configurator.image';
 import { BrowseImage } from './browseImage';
 import { getImages, Question } from '../data/data';
 
 const imageitem = 'image';
-const priceitem = 'image';
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        // marginTop: 65,
     },
     rowContainer: {
         flexDirection: 'row',
         margin: 5,
+        justifyContent: 'center',
     },
     question: {
         flexDirection: 'row',
         height: 35,
         width: 35,
-        justifyContent: 'center'
     },
     text: {
-        flex: 2,
         padding: 10,
         fontSize: 18,
     },
@@ -47,8 +44,7 @@ const styles = StyleSheet.create({
         borderRadius: 65,
         height: 44,
         backgroundColor: 'green',
-        flex: 2,
-        justifyContent: 'flex-end',
+        width: 250,
     },
     buttonText: {
         padding: 10,
@@ -59,102 +55,100 @@ const styles = StyleSheet.create({
     },
     image: {
         height: 55,
-        width: 55
+        width: 55,
     },
-    list:{
-        marginTop: 15,
-        marginLeft: 45,
-        marginRight: 45,
+    list: {
+        margin: 15,
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'center',
     },
     input: {
+        width: 250,
         height: 50,
         padding: 4,
-        marginRight: 5,
         fontSize: 23,
         borderWidth: 1,
         borderColor: 'green',
         borderRadius: 8,
         color: 'black',
-        flex:2,
-        justifyContent: 'center'
-    }
-})
+        justifyContent: 'center',
+        textAlign: 'center',
+    },
+});
 
-class Configurator extends React.Component{
-    constructor(props){
+class Configurator extends React.Component {
+    constructor(props) {
         super(props);
         this.state = {
             question: Question,
             tiles: 0,
             images: getImages(30),
             activeImages: [],
-            activePrices: [],
-        }
+        };
     }
-    render(){
-        return(
+
+    render() {
+        return (
             <ScrollView style={styles.container}>
                 <View
-                    style={styles.rowContainer}>
-                    <Text style={styles.text}>Default question image: </Text>
+                    style={styles.rowContainer}
+                >
+                    <Text style={styles.text}>Verborgen afbeelding:</Text>
                 </View>
                 <View style={styles.list}>
                     <BrowseImage
                         width={150}
                         image={this.state.question}
-                        onClick={this.onQuestionImageClick.bind(this)}/>
+                        onClick={this.onQuestionImageClick.bind(this)}
+                    />
                 </View>
                 <View
-                    style={styles.rowContainer}>
-                    <Text style={styles.text}>Amount of Tiles</Text>
+                    style={styles.rowContainer}
+                >
+                    <Text style={styles.text}>Aantal tegels:</Text>
+                </View>
+                <View
+                    style={styles.rowContainer}
+                >
                     <TextInput
-                        keyboardType='numeric'
+                        keyboardType={'numeric'}
                         style={styles.input}
                         value={this.state.tiles.toString()}
-                        onChange={this.handleOnTileChange.bind(this)}/>
+                        onChange={this.handleOnTileChange.bind(this)}
+                    />
                 </View>
-                <View
-                    style={styles.rowContainer}>
-                    <Text>Update gegevens</Text>
-                    <TouchableHighlight
-                        style={styles.button}
-                        onPress={this.updateTiles.bind(this)}
-                        underlayColor='white'>
-                        <Text style={styles.buttonText}>Update</Text>
-                    </TouchableHighlight>
-                </View>
-                <Text>Afbeeldingen</Text>
+                <Text />
                 <View style={styles.list}>
                     {this.showImages()}
                 </View>
+                <Text />
                 <View
-                    style={styles.rowContainer}>
+                    style={styles.rowContainer}
+                >
                     <TouchableHighlight
                         style={styles.button}
                         onPress={this.saveToState.bind(this)}
-                        underlayColor='white'>
+                        underlayColor="white"
+                    >
                         <Text style={styles.buttonText}>Save setup</Text>
                     </TouchableHighlight>
                 </View>
             </ScrollView>
-        )
+        );
     }
-    onQuestionImageClick(image){
+    onQuestionImageClick(image) {
         this.setState({
-            question: image
-        })
+            question: image,
+        });
     }
-    saveToState(){
-        var imagesAndPrices = [];
-        for (var i = 0; i < this.getTileToImageCount(); i++) {
-            var ob = {
+    saveToState() {
+        const imagesAndPrices = [];
+        for (let i = 0; i < this.getTileToImageCount(); i++) {
+            const ob = {
                 image: this.state.activeImages[i],
-                price: this.state.activePrices[i],
-                done: false
-            }
+                done: false,
+            };
             imagesAndPrices.push(ob);
         }
         this.props.updateConfig(
@@ -166,185 +160,104 @@ class Configurator extends React.Component{
         this.props.navigator.pop();
     }
 
-    handleOnTileChange(event){
+    handleOnTileChange(event) {
         this.setState({
-            tiles: parseInt(event.nativeEvent.text === '' ? 0 : event.nativeEvent.text)
-        })
-        //Check if value not bigger then 60
-        if(this.state.tiles % 2 > 0){
+            tiles: parseInt(event.nativeEvent.text === '' ? 0 : event.nativeEvent.text, 10),
+        });
+        // Check if value not bigger then the amount of max images
+        if (this.state.tiles % 2 > 0) {
             this.setState({
-                tiles: this.state.tiles - 1
-            })
+                tiles: this.state.tiles - 1,
+            });
         }
-        if(this.state.tiles > 60){
+        if (this.state.tiles > this.state.images.length * 2) {
             this.setState({
-                tiles: 60
-            })
+                tiles: this.state.images.length * 2,
+            });
         }
+        this.updateTiles();
     }
-    showPrices(){
-        var list = this.state.activePrices.map((item, index) => {
-            return (
-                <View key={index}>
-                    <Text>{item.price}</Text>
-                </View>
-            )
-        })
-        return list;
-    }
-    showImages(){
-        var list = this.state.images.map((item, index) => {
+    showImages() {
+        /* eslint-disable arrow-body-style*/
+        const list = this.state.images.map((item, index) => {
+        /* eslint-enable arrow-body-style*/
             return (
                 <View key={index}>
                     <ConfiguratorImage
                         item={item}
                         index={index}
                         onClick={this.addImageToState.bind(this, item, index)}
-                        ref={imageitem+index}/>
+                        ref={imageitem + index}
+                    />
                 </View>
-            )
-        })
+            );
+        });
         return list;
     }
-    updateTiles(){
+    updateTiles() {
         this.setTiles();
-        this.setPrices();
     }
-    setPrices(){
-        var amount = this.getTileToImageCount();
-        if(this.state.activePrices.length === 0){
-            var list = [];
-            for (var i = 0; i < amount; i++) {
-                var object= {
-                    price: 'Price ' + i
-                }
-                list.push(object);
-            }
-            this.setState({
-                activePrices: list
-            })
-        }
-    }
-    getTileToImageCount(){
+    getTileToImageCount() {
         return this.state.tiles / 2;
     }
-    setTiles(){
-        var amount = this.getTileToImageCount();
-        var toActiveState = []
-        for (var i = 0; i < amount; i++) {
-
-            this.refs[imageitem+ i].setActiveState(true);
+    setTiles() {
+        const amount = this.getTileToImageCount();
+        const toActiveState = [];
+        for (let i = 0; i < this.state.images.length; i++) {
+            this.refs[imageitem + i].setActiveState(false);
+        }
+        for (let i = 0; i < amount; i++) {
+            this.refs[imageitem + i].setActiveState(true);
             toActiveState.push(this.state.images[i]);
         }
+
         this.setState({
             activeImages: toActiveState,
-        })
+        });
     }
-    addImageToState(item, index, add){
 
-        let images = [];
+    addImageToState(item, index, add) {
+        const images = [];
         images.push(...this.state.activeImages);
 
-        var amount = this.getTileToImageCount();
+        const amount = this.getTileToImageCount();
 
         if (this.state.activeImages.length >= amount && add) {
-            this.refs[imageitem+ index].setActiveState(false)
+            this.refs[imageitem + index].setActiveState(false);
         } else if (add) {
-            this.refs[imageitem+ index].setActiveState(true);
+            this.refs[imageitem + index].setActiveState(true);
             images.push(item);
         } else {
-            this.refs[imageitem+ index].setActiveState(false);
-            var i = images.indexOf(item);
+            this.refs[imageitem + index].setActiveState(false);
+            const i = images.indexOf(item);
             if (i > -1) {
                 images.splice(i, 1);
             }
         }
 
         this.setState({
-            activeImages: images
-        })
+            activeImages: images,
+        });
     }
-
-    /*Gets the images through the cameralRoll*/
-
-    // getImages(){
-    //     return CameraRoll.getPhotos({first:50})
-    //         .then((res)=>{
-    //             this.storeImages(res);
-    //         })
-    //         .catch((err)=>{
-    //             this.logImageError(err)
-    //         })
-    // }
-    //
-    // storeImages(data) {
-    //     const assets = data.edges;
-    //     const images = assets.map( asset => asset.node.image );
-    //     this.setState({
-    //         images: images,
-    //     });
-    //     console.log(images);
-    //  }
-    //
-    //  logImageError(err) {
-    //      console.log(err);
-    //  }
-
-    /*This code is added for getting images from the device memory*/
-    //  selectQuestionImage() {
-    //     var options = {
-    //         title: '', // specify null or empty string to remove the title
-    //         cancelButtonTitle: 'Cancel',
-    //         takePhotoButtonTitle: '', // specify null or empty string to remove this button
-    //         chooseFromLibraryButtonTitle: 'Choose from Library...', // specify null or empty string to remove this button
-    //         cameraType: 'back', // 'front' or 'back'
-    //         mediaType: 'photo', // 'photo' or 'video'
-    //         maxWidth: 100, // photos only
-    //         maxHeight: 100, // photos only
-    //         quality: 0.2, // 0 to 1, photos only
-    //         noData: false, // photos only - disables the base64 `data` field from being generated (greatly improves performance on large photos)
-    //         storageOptions: { // if this key is provided, the image will get saved in the documents directory on ios, and the pictures directory on android (rather than a temporary directory)
-    //             skipBackup: true, // ios only - image will NOT be backed up to icloud
-    //         }
-    //     };
-    //     ImagePickerManager.showImagePicker(options, (response) => {
-    //         console.log('Response = ', response);
-    //
-    //         if (response.didCancel) {
-    //             console.log('User cancelled image picker');
-    //         }
-    //         else if (response.error) {
-    //             console.log('ImagePickerManager Error: ', response.error);
-    //         }
-    //         else if (response.customButton) {
-    //             console.log('User tapped custom button: ', response.customButton);
-    //         }
-    //         else {
-    //             const source = {uri: 'data:image/jpeg;base64,' + response.data, isStatic: true};
-    //             this.setState({
-    //                 questionSource: source
-    //             });
-    //         }
-    //     });
-    // }
 }
-
+/* eslint-disable no-unused-vars, arrow-body-style*/
 const mapStateToProps = (state, ownProps) => {
-    return{
-        config: state.config
-    }
-}
+    return {
+        config: state.config,
+    };
+};
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         updateConfig: (question, tiles, imagesAndPrices) => {
-            dispatch(UpdateConfigAction(question, tiles, imagesAndPrices))
+            dispatch(updateConfigAction(question, tiles, imagesAndPrices));
         },
-        saveInStore: ()=> {
-            dispatch(SaveStorageAction())
-        }
-    }
-}
+        saveInStore: () => {
+            dispatch(saveStorageAction());
+        },
+    };
+};
+/* eslint-enable no-unused-vars, arrow-body-style*/
 
 export default connect(
     mapStateToProps,

@@ -8,13 +8,6 @@ import
     }
     from 'react-native';
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#111111'
-    }
-})
-
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
@@ -25,6 +18,20 @@ import reducers from './reducers';
 import Main from './components/main';
 const logger = createLogger();
 const store = createStore(reducers, {config:{}}, applyMiddleware(thunk, logger));
+// store.subscribe((state) => {
+//
+// });
+//
+// store.disptch({
+//     type: LOAD_STATE
+// })
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#111111'
+    }
+})
 
 export class App extends Component {
   render() {

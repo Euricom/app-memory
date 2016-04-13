@@ -1,48 +1,57 @@
 import * as types from './actionTypes';
 
-export function UpdateConfigAction(question, tiles, imagesAndPrices) {
-  return {
-    type: types.UPDATE_CONFIG,
-    payload: {
-        question,
-        tiles,
-        imagesAndPrices
-    },
-  };
+export function updateConfigAction(question, tiles, imagesAndPrices) {
+    return {
+        type: types.UPDATE_CONFIG,
+        payload: {
+            question,
+            tiles,
+            imagesAndPrices,
+        },
+    };
 }
 
-export function UpdateConfigImageAction(imagesAndPrices){
+export function updateConfigImageAction(imagesAndPrices) {
     return {
         type: types.UPDATE_CONFIG_IMAGE,
-        payload: {imagesAndPrices}
-    }
+        payload: {
+            imagesAndPrices,
+        },
+    };
 }
 
-export function SaveStorageAction(){
+export function saveStorageAction() {
     return {
-        type: types.SAVE_STORAGE
-    }
+        type: types.SAVE_STORAGE,
+    };
 }
-export function UploadStorageAction(){
+export function uploadStorageAction() {
     return {
-        type: types.UPLOAD_STORAGE
-    }
+        type: types.UPLOAD_STORAGE,
+    };
 }
-export function UpdateConfigWinnerAction(winner){
+export function updateConfigWinnerAction(winner) {
     return {
         type: types.UPDATE_CONFIG_WINNER,
-        payload: {winner}
-    }
+        payload: {
+            winner,
+        },
+    };
 }
-export function SaveShuffledImagesAction(images){
+export function saveShuffledImagesAction(images) {
     return {
         type: types.SAVE_SHUFFLEDIMAGES,
-        payload: {images}
-    }
+        payload: {
+            images,
+        },
+    };
 }
-export function SaveNewShuffledImagesAction(images, shuffledImages){
+export function saveNewShuffledImagesAction(images, shuffledImages) {
     return {
         type: types.SAVE_NEWSHUFFLEDIMAGES,
-        payload: {images, shuffledImages}
-    }
+        payload: {
+            images,
+            shuffledImages,
+        },
+    };
 }

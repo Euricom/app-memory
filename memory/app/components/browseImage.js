@@ -2,11 +2,9 @@ import React,
     {
         View,
         Image,
-        StyleSheet,
         TouchableHighlight,
     }
     from 'react-native';
-import question from '../data/question.jpg';
 
 import { ImagePickerManager } from 'NativeModules';
 

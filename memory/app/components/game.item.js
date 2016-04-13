@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-indent-props, react/jsx-no-bind, react/prop-types, react/sort-comp */
 import React,
     {
         View,
@@ -23,54 +24,56 @@ export class GameItem extends React.Component{
             <TouchableHighlight
                 onPress={this.handleClick.bind(this)}
                 style={this.getButtonStyle()}
-                underlayColor="white">
+                underlayColor="white"
+            >
                 <Image
                     style={this.getImageButtonStyle()}
                     source={this.getImageOnState()}
-                    resizeMode='stretch'/>
+                    resizeMode="stretch"
+                />
             </TouchableHighlight>
-        )
+        );
     }
-    getButtonStyle(){
+    getButtonStyle() {
         return {
-            margin: 5,
+            margin: this.props.margin,
             borderRadius: 10,
             height: this.props.width,
             width: this.props.width,
-        }
+        };
     }
-    getImageButtonStyle(){
+    getImageButtonStyle() {
         return {
-            height: this.props.width - 5,
-            width: this.props.width - 5,
-            padding: 5,
-        }
+            borderRadius: 10,
+            height: this.props.width,
+            width: this.props.width,
+        };
     }
-    setDone(){
+    setDone() {
         this.setState({
-            done: true
-        })
+            done: true,
+        });
     }
-    setUnactive(){
+    setUnactive() {
         this.setState({
-            active: false
-        })
+            active: false,
+        });
     }
-    handleClick(){
-        //check if own component is already clicked ( should halt possible doubleclicks)
-        if(this.state.active){
+    handleClick() {
+        // check if own component is already clicked ( should halt possible doubleclicks)
+        if (this.state.active) {
             return;
         }
 
         this.setState({
-            active: true
-        })
-        if(!this.state.done){
+            active: true,
+        });
+        if (!this.state.done) {
             this.props.onClick();
         }
     }
-    getImageOnState(){
-        if(this.state.active){
+    getImageOnState() {
+        if (this.state.active) {
             return this.props.link;
         } else {
             return Question;
@@ -84,4 +87,5 @@ GameItem.propTypes = {
     onClick: React.PropTypes.func.isRequired,
     width: React.PropTypes.number.isRequired,
     isDone: React.PropTypes.bool.isRequired,
+    margin: React.PropTypes.number.isRequired,
 }

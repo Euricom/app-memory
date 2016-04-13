@@ -6,33 +6,32 @@ import React,
         TouchableHighlight,
     }
     from 'react-native';
-import question from '../data/question.jpg';
 
 const styles = StyleSheet.create({
     button:{
-        height: 75,
-        width: 75,
+        height: 90,
+        width: 90,
         flexWrap: 'wrap',
         margin:2,
     },
     activeButton: {
         margin: 2,
         borderRadius: 10,
-        height: 75,
-        width: 75,
+        height: 90,
+        width: 90,
         flexWrap: 'wrap',
         borderColor: 'green',
         borderWidth: 5,
     },
     image: {
         borderRadius: 10,
-        height: 75,
-        width: 75,
+        height: 90,
+        width: 90,
     },
     activeImage: {
         borderRadius: 8,
-        height: 65,
-        width: 65,
+        height: 80,
+        width: 80,
     }
 })
 

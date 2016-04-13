@@ -1,14 +1,13 @@
-import React,
-    {
-        View,
-        StyleSheet,
-        Text,
-        Modal,
-        TouchableHighlight,
-        TextInput,
-        Image
-    }
-    from 'react-native';
+/* eslint-disable react/jsx-indent-props, react/jsx-no-bind, react/prop-types, react/sort-comp */
+import React, {
+    View,
+    StyleSheet,
+    Text,
+    Modal,
+    TouchableHighlight,
+    TextInput,
+    Image,
+} from 'react-native';
 
 import { pw } from '../data/data';
 
@@ -42,7 +41,7 @@ const styles = StyleSheet.create({
         width: 250,
         justifyContent: 'center',
         overflow: 'hidden',
-        backgroundColor: 'green'
+        backgroundColor: 'green',
     },
     buttonText: {
         padding: 10,
@@ -70,7 +69,7 @@ const styles = StyleSheet.create({
     },
 });
 
-export class Authenticator extends React.Component{
+export class Authenticator extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -80,124 +79,130 @@ export class Authenticator extends React.Component{
             focusDescriptionInput: true,
         };
     }
-    onComponentDidMount(){
-        console.log('mounting');
+    onComponentDidMount() {
         this.refs.InputField.focus();
     }
 
     render() {
-      var modalBackgroundStyle = {
-        backgroundColor: this.state.transparent ? 'rgba(0, 0, 0, 0.5)' : '#f5fcff',
-      };
-      var innerContainerTransparentStyle = this.state.transparent
-        ? {backgroundColor: '#fff', padding: 20}
+        const modalBackgroundStyle = {
+            backgroundColor: this.state.transparent ? 'rgba(0, 0, 0, 0.5)' : '#f5fcff',
+        };
+        const innerContainerTransparentStyle = this.state.transparent ? {
+            backgroundColor: '#fff',
+            padding: 20,
+        }
         : null;
 
-      return (
-          <Modal
-            animated={this.state.animated}
-            transparent={this.state.transparent}
-            visible={this.props.modalVisible}>
-            <View style={[styles.container, modalBackgroundStyle]}>
-              <View style={[styles.innerContainer, innerContainerTransparentStyle]}>
-                {this.showHeader()}
-                {this.showMiddle()}
-                {this.showImage()}
-                {this.showFooter()}
-                <Text> </Text>
-                {this.showPassword()}
-                {this.showClose()}
-              </View>
-            </View>
-          </Modal>
+        return (
+            <Modal
+                animated={this.state.animated}
+                transparent={this.state.transparent}
+                visible={this.props.modalVisible}
+            >
+                <View style={[styles.container, modalBackgroundStyle]}>
+                    <View style={[styles.innerContainer, innerContainerTransparentStyle]}>
+                        {this.showHeader()}
+                        {this.showMiddle()}
+                        {this.showImage()}
+                        {this.showFooter()}
+                        <Text />
+                        {this.showPassword()}
+                        {this.showClose()}
+                    </View>
+                </View>
+            </Modal>
       );
     }
-    showImage(){
-        if(this.props.modalValues.image){
+    showImage() {
+        if (this.props.modalValues.image) {
             return (
                 <View>
                     <Text />
                     <Image
                         style={styles.image}
-                        source={this.props.modalValues.image}>
-                    </Image>
+                        source={this.props.modalValues.image}
+                    />
                     <Text />
                 </View>
-            )
+            );
         }
-        return ( <View />)
+        return (<View />);
     }
-    showHeader(){
-        if(this.props.modalValues.header){
+    showHeader() {
+        if (this.props.modalValues.header) {
             return (
                 <Text>{this.props.modalValues.header}</Text>
-            )
+            );
         }
-        return ( <View />)
+        return (<View />);
     }
-    showMiddle(){
-        if(this.props.modalValues.middleText){
+    showMiddle() {
+        if (this.props.modalValues.middleText) {
             return (
                 <Text>{this.props.modalValues.middleText}</Text>
-            )
+            );
         }
-        return ( <View />)
+        return (<View />);
     }
-    showFooter(){
-        if(this.props.modalValues.footer){
+    showFooter() {
+        if (this.props.modalValues.footer) {
             return (
                 <Text>{this.props.modalValues.footer}</Text>
-            )
+            );
         }
-        return ( <View />)
+        return (<View />);
     }
-    showClose(){
-        if(this.props.modalValues.closeText){
-            return(
+    showClose() {
+        if (this.props.modalValues.closeText) {
+            return (
                 <TouchableHighlight
-                  keyboardType='numeric'
+                  keyboardType={'numeric'}
                   onPress={this.close.bind(this)}
-                  style={styles.button}>
-                  <Text style={styles.buttonText}>{this.props.modalValues.closeText}</Text>
+                  style={styles.button}
+                >
+                    <Text style={styles.buttonText}>{this.props.modalValues.closeText}</Text>
                 </TouchableHighlight>
-            )
+            );
         }
-        return ( <View />)
+        return (<View />);
     }
-    showPassword(){
-        if(this.props.modalValues.password){
+    showPassword() {
+        if (this.props.modalValues.password) {
             return (
                 <View>
                     <TextInput
-                        ref='InputField'
+                        ref="InputField"
                         autoFocus={this.state.focusDescriptionInput}
+                        /* eslint-disable */
                         secureTextEntry={true}
+                        /* eslint-enable */
                         style={styles.input}
                         value={this.state.textValue}
-                        onChange={this.handleInput.bind(this)}/>
+                        onChange={this.handleInput.bind(this)}
+                    />
                 </View>
-            )
+            );
         }
-        return ( <View />)
+        return (<View />);
     }
-    close(){
+    close() {
         this.setState({
-            password: ''
-        })
+            password: '',
+        });
         this.props.onEnter(false);
     }
-    checkPassword(){
-        if(pw === this.state.inputValue){
+    checkPassword() {
+        if (pw === this.state.inputValue) {
             this.setState({
-                inputValue: ''
-            })
+                inputValue: '',
+            });
             this.props.onEnter(true);
         }
     }
-    handleInput(event){
+    handleInput(event) {
         this.setState({
-            inputValue: event.nativeEvent.text
-        })
+            inputValue: event.nativeEvent.text,
+        });
         this.checkPassword();
     }
 }
@@ -206,4 +211,4 @@ Authenticator.propTypes = {
     onEnter: React.PropTypes.func.isRequired,
     modalVisible: React.PropTypes.bool.isRequired,
     modalValues: React.PropTypes.object.isRequired,
-}
+};

@@ -13,7 +13,7 @@ import img_11 from './img_11.jpg';
 import img_12 from './img_12.jpg';
 import img_13 from './img_13.jpg';
 import img_14 from './img_14.jpg';
-import img_15 from './img_15.jpg';
+import img_15 from './img_15.jpeg';
 import img_16 from './img_16.jpg';
 import img_17 from './img_17.jpg';
 import img_18 from './img_18.jpg';

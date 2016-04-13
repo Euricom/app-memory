@@ -166,7 +166,7 @@ class Game extends React.Component {
             } else {
                 this.setState({
                     modal: true,
-                    authenticate: this.getPasswordObjectIncorrect(),
+                    authenticate: this.getPasswordObjectIncorrect(ref1.item, ref2.item),
                 });
             }
         }
@@ -248,12 +248,14 @@ class Game extends React.Component {
     }
 
 
-    getPasswordObjectIncorrect() {
+    getPasswordObjectIncorrect(ref1, ref2) {
         return {
             header: 'Jammer, u heeft geen prijs gewonnen.',
             footer: 'Toon dit scherm aan een Euricom medewerker.',
             password: true,
             passwordText: 'Unlock',
+            image1: ref1.image.image,
+            image2: ref2.image.image,
         };
     }
     getPasswordObject(item) {

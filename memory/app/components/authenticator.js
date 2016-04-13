@@ -66,7 +66,23 @@ const styles = StyleSheet.create({
     image: {
         height: 200,
         width: 200,
+        borderColor: 'green',
+        borderWidth: 2,
+        borderRadius: 45,
     },
+    wrongImage: {
+        margin: 15,
+        height: 100,
+        width: 100,
+        borderColor: 'red',
+        borderWidth: 2,
+        borderRadius: 25,
+    },
+    rowContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+    }
 });
 
 export class Authenticator extends React.Component {
@@ -80,7 +96,7 @@ export class Authenticator extends React.Component {
         };
     }
     onComponentDidMount() {
-        this.refs.InputField.focus();
+        // this.refs.InputField.focus();
     }
 
     render() {
@@ -104,6 +120,7 @@ export class Authenticator extends React.Component {
                         {this.showHeader()}
                         {this.showMiddle()}
                         {this.showImage()}
+                        {this.showWrongImages()}
                         {this.showFooter()}
                         <Text />
                         {this.showPassword()}
@@ -112,6 +129,25 @@ export class Authenticator extends React.Component {
                 </View>
             </Modal>
       );
+    }
+    showWrongImages() {
+        if (this.props.modalValues.image1 && this.props.modalValues.image2) {
+            return (
+                <View style={styles.rowContainer}>
+                    <Text />
+                    <Image
+                        style={styles.wrongImage}
+                        source={this.props.modalValues.image1}
+                    />
+                    <Image
+                        style={styles.wrongImage}
+                        source={this.props.modalValues.image2}
+                    />
+                    <Text />
+                </View>
+            );
+        }
+        return (<View />);
     }
     showImage() {
         if (this.props.modalValues.image) {

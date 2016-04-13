@@ -75,7 +75,7 @@ class Main extends React.Component {
             <View style={styles.container}>
                 <Authenticator
                     modalVisible={this.state.authenticator}
-                    modalValues = { this.state.authenticate}
+                    modalValues={ this.state.authenticate}
                     onEnter={this.onEnter.bind(this)}
                 />
                 <Image

@@ -1,38 +1,60 @@
 /* eslint-disable react/jsx-indent-props, react/jsx-no-bind, react/prop-types, react/sort-comp */
-import React,
-    {
-        View,
-        Image,
-        StyleSheet,
-        TouchableHighlight,
-    }
-    from 'react-native';
+import React, {
+    Image,
+    TouchableHighlight,
+} from 'react-native';
+import rebound from 'rebound';
+
 import { Question } from '../data/data';
 
-export class GameItem extends React.Component{
-    constructor(props){
+export class GameItem extends React.Component {
+    constructor(props) {
         super(props);
 
-        this.state={
+        this.state = {
             active: this.props.isDone,
             done: this.props.isDone,
-        }
+            scale: 1,
+        };
     }
+    componentWillMount() {
+        this.springSystem = new rebound.SpringSystem();
+        this._scrollSpin = this.springSystem.createSpring();
+        const springConfig = this._scrollSpin.getSpringConfig();
+        springConfig.tension = 230;
+        springConfig.friction = 10;
 
-    render(){
+        this._scrollSpin.addListener({
+            onSpringUpdate: () => {
+                const currentValue = this._scrollSpin.getCurrentValue();
+                this.setState({
+                    scale: currentValue,
+                });
+            },
+        });
+        this._scrollSpin.setCurrentValue(1);
+    }
+    render() {
         return (
             <TouchableHighlight
-                onPress={this.handleClick.bind(this)}
+                onPressIn={this._onPressIn.bind(this)}
+                onPressOut={this._onPressOut.bind(this)}
                 style={this.getButtonStyle()}
                 underlayColor="white"
             >
                 <Image
                     style={this.getImageButtonStyle()}
                     source={this.getImageOnState()}
-                    resizeMode="stretch"
                 />
             </TouchableHighlight>
         );
+    }
+    _onPressIn() {
+        this._scrollSpin.setEndValue(0.5);
+    }
+    _onPressOut() {
+        this._scrollSpin.setEndValue(1);
+        this.handleClick();
     }
     getButtonStyle() {
         return {
@@ -40,6 +62,10 @@ export class GameItem extends React.Component{
             borderRadius: 10,
             height: this.props.width,
             width: this.props.width,
+            transform: [
+                { scaleX: this.state.scale },
+                { scaleY: this.state.scale },
+            ],
         };
     }
     getImageButtonStyle() {
@@ -75,9 +101,8 @@ export class GameItem extends React.Component{
     getImageOnState() {
         if (this.state.active) {
             return this.props.link;
-        } else {
-            return Question;
         }
+        return Question;
     }
 }
 
@@ -88,4 +113,4 @@ GameItem.propTypes = {
     width: React.PropTypes.number.isRequired,
     isDone: React.PropTypes.bool.isRequired,
     margin: React.PropTypes.number.isRequired,
-}
+};

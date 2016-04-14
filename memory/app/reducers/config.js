@@ -13,7 +13,9 @@ export default function config(state = initialState, action = {}) {
     switch(action.type){
         case types.UPDATE_CONFIG_IMAGE:
             return {
+                /*eslint-disable*/
                 ...state,
+                /*eslint-enable*/
                 imagesAndPrices: action.payload.imagesAndPrices
             };
         case types.UPDATE_CONFIG:
@@ -51,12 +53,7 @@ export default function config(state = initialState, action = {}) {
 }
 
 function WriteToStorage(state){
-
-    AsyncStorage.setItem("tiles", state.tiles.toString());
-    AsyncStorage.setItem("questionImage", JSON.stringify(state.question));
-    AsyncStorage.setItem("imagesAndPrices", JSON.stringify(state.imagesAndPrices));
-    AsyncStorage.setItem("winner", JSON.stringify(state.winner));
-    AsyncStorage.setItem("shuffledImages", JSON.stringify(state.shuffledImages));
+    AsyncStorage.setItem("state", JSON.stringify(state));
 }
 
 function GetStateFromStorage(){
@@ -69,22 +66,14 @@ function GetStateFromStorage(){
         shuffledImages: [],
     };
 
-    AsyncStorage.getItem("tiles")
+    AsyncStorage.getItem("state")
         .then((value) => {
-            state.tiles = parseInt(value);
+            console.log(value)
+            if(value){
+                console.log('writing to state: ',value)
+                state = JSON.parse(value);
+            }
         })
         .done();
-    AsyncStorage.getItem("questionImage").then((value) => {
-            state.question = JSON.parse(value);
-        }).done();
-    AsyncStorage.getItem("imagesAndPrices").then((value) => {
-            state.imagesAndPrices = JSON.parse(value);
-        }).done();
-    AsyncStorage.getItem("winner").then((value) => {
-            state.winner = JSON.parse(value);
-        }).done();
-    AsyncStorage.getItem("shuffledImages").then((value) => {
-            state.shuffledImages = JSON.parse(value);
-        }).done();
     return state;
 }

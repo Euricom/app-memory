@@ -33,6 +33,7 @@ class Configurator extends React.Component {
             tiles: 0,
             images: getImages(30),
             activeImages: [],
+            differentAmount: false,
         };
     }
 
@@ -70,28 +71,57 @@ class Configurator extends React.Component {
                 <View style={styles.wrappedList}>
                     {this.showImages()}
                 </View>
+                {this._differentAmount()}
                 <Text />
                 <View
                     style={styles.rowContainer}
                 >
                     <TouchableHighlight
-                        style={styles.navButton}
+                        style={styles.navSmallButton}
                         onPress={this.saveToState.bind(this)}
                         underlayColor="white"
                     >
-                        <Text style={styles.navButtonText}>Save setup</Text>
+                        <Text style={styles.navSmallButtonText}> Save setup </Text>
+                    </TouchableHighlight>
+                    <Text style={styles.navSpace}/>
+                    <TouchableHighlight
+                        style={styles.navSmallButton}
+                        onPress={this.cancelState.bind(this)}
+                        underlayColor="white"
+                    >
+                        <Text style={styles.navSmallButtonText}> Cancel Setup </Text>
                     </TouchableHighlight>
                 </View>
             </ScrollView>
         );
+    }
+    _differentAmount() {
+        if(this.state.differentAmount){
+            return (
+                <Text style={styles.wrongAmountText}>Het aantal afbeeldingen komt niet overeen met het aantal tegels.</Text>
+            );
+        }
+        return (<View/>);
     }
     onQuestionImageClick(image) {
         this.setState({
             question: image,
         });
     }
+    cancelState() {
+        this.props.navigator.pop();
+    }
     saveToState() {
         const imagesAndPrices = [];
+        if(this.state.activeImages.length !== this.getTileToImageCount()){
+            this.setState({
+                differentAmount: true,
+            });
+            return;
+        }
+         this.setState({
+                differentAmount: false,
+            });
         for (let i = 0; i < this.getTileToImageCount(); i++) {
             const ob = {
                 image: this.state.activeImages[i],

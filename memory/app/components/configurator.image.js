@@ -27,7 +27,6 @@ export class ConfiguratorImage extends React.Component {
                     <Image
                         style={this.getImageStyle()}
                         source={this.props.item.image}
-                        resizeMode="stretch"
                     />
                 </TouchableHighlight>
             </View>

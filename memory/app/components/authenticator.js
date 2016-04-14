@@ -90,7 +90,7 @@ export class Authenticator extends React.Component {
     showHeader() {
         if (this.props.modalValues.header) {
             return (
-                <Text>{this.props.modalValues.header}</Text>
+                <Text style={styles.modalText}>{this.props.modalValues.header}</Text>
             );
         }
         return (<View />);
@@ -98,7 +98,7 @@ export class Authenticator extends React.Component {
     showMiddle() {
         if (this.props.modalValues.middleText) {
             return (
-                <Text>{this.props.modalValues.middleText}</Text>
+                <Text style={styles.modalText}>{this.props.modalValues.middleText}</Text>
             );
         }
         return (<View />);
@@ -106,7 +106,7 @@ export class Authenticator extends React.Component {
     showFooter() {
         if (this.props.modalValues.footer) {
             return (
-                <Text>{this.props.modalValues.footer}</Text>
+                <Text style={styles.modalText}>{this.props.modalValues.footer}</Text>
             );
         }
         return (<View />);

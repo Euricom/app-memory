@@ -61,7 +61,7 @@ class Main extends React.Component {
         this.state = {
             authenticator: true,
             whereTo: '',
-            authenticate: this.getPasswordObject(),
+            authenticate: this._getPasswordObject(),
         };
     }
     componentDidMount() {
@@ -76,7 +76,7 @@ class Main extends React.Component {
                 <Authenticator
                     modalVisible={this.state.authenticator}
                     modalValues={ this.state.authenticate}
-                    onEnter={this.onEnter.bind(this)}
+                    onEnter={this._onEnter.bind(this)}
                 />
                 <Image
                     style={styles.image}
@@ -84,21 +84,21 @@ class Main extends React.Component {
                 />
                 <TouchableHighlight
                     style={styles.button}
-                    onPress={this.handleToSetup.bind(this)}
+                    onPress={this._handleToSetup.bind(this)}
                     underlayColor="white"
                 >
                     <Text style={styles.buttonText}> Configuratie </Text>
                 </TouchableHighlight>
                 <TouchableHighlight
                     style={styles.button}
-                    onPress={this.handleToGame.bind(this)}
+                    onPress={this._handleToGame.bind(this)}
                     underlayColor="white"
                 >
                     <Text style={styles.buttonText}> Nieuw spel </Text>
                 </TouchableHighlight>
                 <TouchableHighlight
                     style={styles.button}
-                    onPress={this.handleToExistingGame.bind(this)}
+                    onPress={this._handleToExistingGame.bind(this)}
                     underlayColor="white"
                 >
                     <Text style={styles.buttonText}> Verder spelen </Text>
@@ -107,7 +107,7 @@ class Main extends React.Component {
         );
     }
 
-    onEnter(open) {
+    _onEnter(open) {
         if (this.props.config.winner !== {} && this.props.config.winner !== undefined) {
             this.props.updateWinner({});
             this.props.saveStorage();
@@ -116,7 +116,7 @@ class Main extends React.Component {
             this.setState({
                 authenticator: false,
             });
-            this.pushTo();
+            this._pushTo();
         } else {
             this.setState({
                 authenticator: false,
@@ -126,24 +126,24 @@ class Main extends React.Component {
         }
     }
 
-    getPasswordObject() {
+    _getPasswordObject() {
         return {
             header: 'Geef het wachtwoord',
             password: true,
         };
     }
 
-    handleToSetup() {
+    _handleToSetup() {
         this.setState({
             // authenticator: true,
             // authenticate: this.getPasswordObjectForSetup,
             whereTo: 'config',
         });
-        this.pushTo();
+        this._pushTo();
     }
 
 
-    pushTo() {
+    _pushTo() {
         switch (this.state.whereTo) {
         case 'config':
             this.props.navigator.push({
@@ -152,14 +152,6 @@ class Main extends React.Component {
             });
             break;
         case 'newGame':
-            this.reShuffleValues();
-
-            this.props.navigator.push({
-                title: 'Memories Game',
-                component: Game,
-                passProps: { images: this.props.config.shuffledImages },
-            });
-            break;
         case 'existingGame':
             this.props.navigator.push({
                 title: 'Memories Game',
@@ -174,10 +166,12 @@ class Main extends React.Component {
             whereTo: '',
         });
     }
-    reShuffleValues() {
+    _reShuffleValues(reset) {
         const list = [...this.props.config.imagesAndPrices];
-        for (let i = 0; i < list.length; i++) {
-            list[i].done = false;
+        if (reset) {
+            for (let i = 0; i < list.length; i++) {
+                list[i].done = false;
+            }
         }
 
         const shuffled = getImagesShuffledAndDoubled(list);
@@ -186,50 +180,60 @@ class Main extends React.Component {
         // save the the new store inside the storage
         this.props.saveStorage();
     }
-    handleToExistingGame() {
+
+    _handleToExistingGame() {
         if (this.props.config.winner !== null
             && this.props.config.winner !== undefined
             && this.props.config.winner.image !== undefined) {
             this.setState({
                 authenticator: true,
-                authenticate: this.getPasswordObject(this.props.config.winner),
+                authenticate: this._getPasswordObject(this.props.config.winner),
             });
-        } else if (this.props.config.imagesAndPrices !== undefined
-            && this.props.config.imagesAndPrices !== null
-            && this.props.config.imagesAndPrices.length > 0) {
+        } else if (this.props.config.shuffledImages !== undefined
+            && this.props.config.shuffledImages !== null
+            && this.props.config.shuffledImages.length > 0) {
             this.setState({
                 whereTo: 'existingGame',
             });
-            this.pushTo();
+            this._pushTo();
         } else {
-            this.setState({
-                authenticator: true,
-                authenticate: this.getPasswordObjectForEmptyConfig,
-                whereTo: 'config',
-            });
+            if (this.props.config.imagesAndPrices !== undefined
+                && this.props.config.imagesAndPrices !== null
+                && this.props.config.imagesAndPrices.length > 0) {
+                this._reShuffleValues(false);
+                this.setState({
+                    whereTo: 'existingGame',
+                });
+                this._pushTo();
+            } else {
+                this.setState({
+                    whereTo: 'config',
+                });
+            }
         }
     }
 
-    handleToGame() {
+    _handleToGame() {
         if (this.props.config.winner !== null
             && this.props.config.winner !== undefined
             && this.props.config.winner.image !== undefined) {
             this.setState({
                 authenticator: true,
-                authenticate: this.getPasswordObject(this.props.config.winner),
+                authenticate: this._getPasswordObject(this.props.config.winner),
             });
         } else if (this.props.config.imagesAndPrices !== undefined
             && this.props.config.imagesAndPrices !== null
             && this.props.config.imagesAndPrices.length > 0) {
+            this._reShuffleValues();
             this.setState({
                 whereTo: 'newGame',
             });
-            this.pushTo();
+            this._pushTo();
         } else {
             this.setState({
                 whereTo: 'config',
             });
-            this.pushTo();
+            this._pushTo();
         }
     }
 }

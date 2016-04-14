@@ -22,6 +22,7 @@ export default function config(state = initialState, action = {}) {
                 question: action.payload.question,
                 tiles: action.payload.tiles,
                 imagesAndPrices: action.payload.imagesAndPrices,
+                shuffledImages: []
             };
         case types.UPDATE_CONFIG_WINNER:
             return {

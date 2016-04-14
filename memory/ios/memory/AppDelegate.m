@@ -30,8 +30,8 @@
    * `inet` value under `en0:`) and make sure your computer and iOS device are
    * on the same Wi-Fi network.
    */
-    /*10.53.231.17*/
-  jsCodeLocation = [NSURL URLWithString:@"http://10.53.231.17:8081/index.ios.bundle?platform=ios&dev=true"];
+    /*10.53.231.34*/
+  jsCodeLocation = [NSURL URLWithString:@"http://10.53.231.34:8081/index.ios.bundle?platform=ios&dev=true"];
 
   /**
    * OPTION 2

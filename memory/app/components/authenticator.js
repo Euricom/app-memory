@@ -92,11 +92,7 @@ export class Authenticator extends React.Component {
             animated: true,
             transparent: true,
             inputValue: '',
-            focusDescriptionInput: true,
         };
-    }
-    onComponentDidMount() {
-        // this.refs.InputField.focus();
     }
 
     render() {
@@ -189,10 +185,10 @@ export class Authenticator extends React.Component {
         return (<View />);
     }
     showClose() {
+        console.log(this.props.modalValues);
         if (this.props.modalValues.closeText) {
             return (
                 <TouchableHighlight
-                  keyboardType={'numeric'}
                   onPress={this.close.bind(this)}
                   style={styles.button}
                 >
@@ -202,16 +198,15 @@ export class Authenticator extends React.Component {
         }
         return (<View />);
     }
+    /* eslint-disable */
     showPassword() {
         if (this.props.modalValues.password) {
             return (
                 <View>
                     <TextInput
+                        keyboardType = 'numeric'
                         ref="InputField"
-                        autoFocus={this.state.focusDescriptionInput}
-                        /* eslint-disable */
                         secureTextEntry={true}
-                        /* eslint-enable */
                         style={styles.input}
                         value={this.state.textValue}
                         onChange={this.handleInput.bind(this)}
@@ -221,6 +216,7 @@ export class Authenticator extends React.Component {
         }
         return (<View />);
     }
+    /* eslint-enable */
     close() {
         this.setState({
             password: '',

@@ -2,7 +2,6 @@
 import React,
     {
         View,
-        StyleSheet,
     }
     from 'react-native';
 

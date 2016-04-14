@@ -1,3 +1,4 @@
+/* eslint-disable camelcase*/
 import img_0 from './img_0.jpg';
 import img_1 from './img_1.jpg';
 import img_2 from './img_2.jpg';
@@ -68,6 +69,19 @@ const Images = [
     // { reference: 'img_29', image: img_29 }
 ];
 
+function shuffle(list) {
+    const listToReturn = [...list];
+    let j;
+    let x;
+    for (let i = listToReturn.length; i; i -= 1) {
+        j = Math.floor(Math.random() * i);
+        x = list[i - 1];
+        listToReturn[i - 1] = listToReturn[j];
+        listToReturn[j] = x;
+    }
+    return listToReturn;
+}
+
 export function getImages(amount) {
     let am = amount;
     if (am > Images.length) {
@@ -80,13 +94,12 @@ export function getImages(amount) {
 /*
     This function will shuffle and double the inserted images array.
 */
-export function getImagesShuffledAndDoubled(images){
-    const list = [...images];
+export function getImagesShuffledAndDoubled(images) {
+    let list = [...images];
     list.push(...list);
-    shuffle(list);
+    list = shuffle(list);
     return list;
 }
-
 
 /*
     This function will generate x-amount of images with a max of 30 images.
@@ -94,26 +107,17 @@ export function getImagesShuffledAndDoubled(images){
     Returns a list of images ready to add into a memory game
 */
 export function getImagesShuffledAndDoubledByAmount(amount) {
-    if(amount > Images.length){
-        amount = Images.length;
+    let amountToReturn = amount;
+    if (amountToReturn > Images.length) {
+        amountToReturn = Images.length;
     }
-    var list = Images;
-    //Shuffle the list to select different pictures
-    shuffle(list);
-    var toReturn = list.slice(0,amount);
+    let list = Images;
+
+    list = shuffle(list);
+
+    const toReturn = list.slice(0, amountToReturn);
 
     return getImagesShuffledAndDoubled(toReturn);
 }
 
-/*
-    This function shuffles a given array
-*/
-function shuffle(a) {
-    var j, x, i;
-    for (i = a.length; i; i -= 1) {
-        j = Math.floor(Math.random() * i);
-        x = a[i - 1];
-        a[i - 1] = a[j];
-        a[j] = x;
-    }
-}
+/* eslint-enable camelcase*/

@@ -4,7 +4,6 @@ import React,
         ScrollView,
         View,
         Text,
-        StyleSheet,
         TouchableHighlight,
         TextInput,
     }
@@ -83,7 +82,7 @@ class Configurator extends React.Component {
                     >
                         <Text style={styles.navSmallButtonText}> Save setup </Text>
                     </TouchableHighlight>
-                    <Text style={styles.navSpace}/>
+                    <Text style={styles.navSpace} />
                     <TouchableHighlight
                         style={styles.navSmallButton}
                         onPress={this.cancelState.bind(this)}
@@ -96,12 +95,14 @@ class Configurator extends React.Component {
         );
     }
     _differentAmount() {
-        if(this.state.differentAmount){
+        if (this.state.differentAmount) {
             return (
-                <Text style={styles.wrongAmountText}>Het aantal afbeeldingen komt niet overeen met het aantal tegels.</Text>
+                <Text style={styles.wrongAmountText}>
+                    Het aantal afbeeldingen komt niet overeen met het aantal tegels.
+                </Text>
             );
         }
-        return (<View/>);
+        return (<View />);
     }
     onQuestionImageClick(image) {
         this.setState({
@@ -113,15 +114,15 @@ class Configurator extends React.Component {
     }
     saveToState() {
         const imagesAndPrices = [];
-        if(this.state.activeImages.length !== this.getTileToImageCount()){
+        if (this.state.activeImages.length !== this.getTileToImageCount()) {
             this.setState({
                 differentAmount: true,
             });
             return;
         }
-         this.setState({
-                differentAmount: false,
-            });
+        this.setState({
+            differentAmount: false,
+        });
         for (let i = 0; i < this.getTileToImageCount(); i++) {
             const ob = {
                 image: this.state.activeImages[i],

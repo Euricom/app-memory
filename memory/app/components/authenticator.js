@@ -1,7 +1,6 @@
 /* eslint-disable react/jsx-indent-props, react/jsx-no-bind, react/prop-types, react/sort-comp */
 import React, {
     View,
-    StyleSheet,
     Text,
     Modal,
     TouchableHighlight,
@@ -11,79 +10,7 @@ import React, {
 
 import { pw } from '../data/data';
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        padding: 20,
-        alignItems: 'center',
-        marginTop: 15,
-    },
-    innerContainer: {
-        borderRadius: 10,
-        alignItems: 'center',
-        width: 350,
-    },
-    row: {
-        alignItems: 'center',
-        flex: 1,
-        flexDirection: 'row',
-        marginBottom: 20,
-    },
-    rowTitle: {
-        flex: 1,
-        fontWeight: 'bold',
-    },
-    button: {
-        borderRadius: 45,
-        marginTop: 15,
-        height: 44,
-        width: 250,
-        justifyContent: 'center',
-        overflow: 'hidden',
-        backgroundColor: 'green',
-    },
-    buttonText: {
-        padding: 10,
-        fontSize: 35,
-        color: 'white',
-        alignSelf: 'center',
-        justifyContent: 'center',
-    },
-    input: {
-        width: 150,
-        height: 50,
-        fontSize: 23,
-        borderWidth: 1,
-        borderColor: 'green',
-        borderRadius: 8,
-        color: 'black',
-        justifyContent: 'center',
-        textAlign: 'center',
-        overflow: 'hidden',
-        alignSelf: 'center',
-    },
-    image: {
-        height: 200,
-        width: 200,
-        borderColor: 'green',
-        borderWidth: 2,
-        borderRadius: 45,
-    },
-    wrongImage: {
-        margin: 15,
-        height: 100,
-        width: 100,
-        borderColor: 'red',
-        borderWidth: 2,
-        borderRadius: 25,
-    },
-    rowContainer: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'center',
-    }
-});
+import { styles } from '../styles';
 
 export class Authenticator extends React.Component {
     constructor(props) {
@@ -111,7 +38,7 @@ export class Authenticator extends React.Component {
                 transparent={this.state.transparent}
                 visible={this.props.modalVisible}
             >
-                <View style={[styles.container, modalBackgroundStyle]}>
+                <View style={[styles.modalContainer, modalBackgroundStyle]}>
                     <View style={[styles.innerContainer, innerContainerTransparentStyle]}>
                         {this.showHeader()}
                         {this.showMiddle()}
@@ -151,7 +78,7 @@ export class Authenticator extends React.Component {
                 <View>
                     <Text />
                     <Image
-                        style={styles.image}
+                        style={styles.correctImage}
                         source={this.props.modalValues.image}
                     />
                     <Text />
@@ -185,14 +112,13 @@ export class Authenticator extends React.Component {
         return (<View />);
     }
     showClose() {
-        console.log(this.props.modalValues);
         if (this.props.modalValues.closeText) {
             return (
                 <TouchableHighlight
                   onPress={this.close.bind(this)}
-                  style={styles.button}
+                  style={styles.modalButton}
                 >
-                    <Text style={styles.buttonText}>{this.props.modalValues.closeText}</Text>
+                    <Text style={styles.modalButtonText}>{this.props.modalValues.closeText}</Text>
                 </TouchableHighlight>
             );
         }
@@ -207,7 +133,7 @@ export class Authenticator extends React.Component {
                         keyboardType = 'numeric'
                         ref="InputField"
                         secureTextEntry={true}
-                        style={styles.input}
+                        style={styles.modalInput}
                         value={this.state.textValue}
                         onChange={this.handleInput.bind(this)}
                     />

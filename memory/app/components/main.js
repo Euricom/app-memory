@@ -193,7 +193,7 @@ class Main extends React.Component {
         } else if (this.props.config.imagesAndPrices !== undefined
             && this.props.config.imagesAndPrices !== null
             && this.props.config.imagesAndPrices.length > 0) {
-            this._reShuffleValues();
+            this._reShuffleValues(true);
             this.setState({
                 whereTo: 'newGame',
             });

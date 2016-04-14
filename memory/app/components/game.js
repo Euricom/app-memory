@@ -21,26 +21,7 @@ import
 import { Authenticator } from './authenticator';
 import { GameItem } from './game.item';
 
-const styles = StyleSheet.create({
-    container: {
-        marginTop: 15,
-        flex: 1,
-    },
-    button: {
-        borderRadius: 65,
-        marginTop: 15,
-        height: 35,
-        width: 150,
-        backgroundColor: 'green',
-        justifyContent: 'center',
-    },
-    buttonText: {
-        padding: 5,
-        fontSize: 16,
-        color: 'white',
-        alignSelf: 'center',
-    },
-});
+import { styles } from '../styles';
 
 class Game extends React.Component {
     constructor(props) {

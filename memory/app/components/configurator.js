@@ -21,61 +21,9 @@ import { ConfiguratorImage } from './configurator.image';
 import { BrowseImage } from './browseImage';
 import { getImages, Question } from '../data/data';
 
+import { styles } from '../styles';
+
 const imageitem = 'image';
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    rowContainer: {
-        flexDirection: 'row',
-        margin: 5,
-        justifyContent: 'center',
-    },
-    question: {
-        flexDirection: 'row',
-        height: 35,
-        width: 35,
-    },
-    text: {
-        padding: 10,
-        fontSize: 18,
-    },
-    button: {
-        borderRadius: 65,
-        height: 44,
-        backgroundColor: 'green',
-        width: 250,
-    },
-    buttonText: {
-        padding: 10,
-        fontSize: 18,
-        color: 'white',
-        alignSelf: 'center',
-        justifyContent: 'center',
-    },
-    image: {
-        height: 55,
-        width: 55,
-    },
-    list: {
-        margin: 15,
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'center',
-    },
-    input: {
-        width: 250,
-        height: 50,
-        padding: 4,
-        fontSize: 23,
-        borderWidth: 1,
-        borderColor: 'green',
-        borderRadius: 8,
-        color: 'black',
-        justifyContent: 'center',
-        textAlign: 'center',
-    },
-});
 
 class Configurator extends React.Component {
     constructor(props) {
@@ -96,7 +44,7 @@ class Configurator extends React.Component {
                 >
                     <Text style={styles.text}>Verborgen afbeelding:</Text>
                 </View>
-                <View style={styles.list}>
+                <View style={styles.wrappedList}>
                     <BrowseImage
                         width={150}
                         image={this.state.question}
@@ -119,7 +67,7 @@ class Configurator extends React.Component {
                     />
                 </View>
                 <Text />
-                <View style={styles.list}>
+                <View style={styles.wrappedList}>
                     {this.showImages()}
                 </View>
                 <Text />
@@ -127,11 +75,11 @@ class Configurator extends React.Component {
                     style={styles.rowContainer}
                 >
                     <TouchableHighlight
-                        style={styles.button}
+                        style={styles.navButton}
                         onPress={this.saveToState.bind(this)}
                         underlayColor="white"
                     >
-                        <Text style={styles.buttonText}>Save setup</Text>
+                        <Text style={styles.navButtonText}>Save setup</Text>
                     </TouchableHighlight>
                 </View>
             </ScrollView>

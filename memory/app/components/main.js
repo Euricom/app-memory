@@ -22,38 +22,7 @@ import {
     saveNewShuffledImagesAction,
 } from '../actions/config.actions';
 
-const styles = StyleSheet.create({
-    container: {
-        marginTop: 65,
-        flex: 1,
-        backgroundColor: 'white',
-    },
-    image: {
-        borderRadius: 65,
-        marginTop: 15,
-        padding: 10,
-        alignSelf: 'center',
-        justifyContent: 'center',
-        height: 406,
-        width: 224,
-    },
-    button: {
-        borderRadius: 65,
-        marginTop: 15,
-        height: 65,
-        width: 450,
-        backgroundColor: 'green',
-        justifyContent: 'center',
-        alignSelf: 'center',
-    },
-    buttonText: {
-        padding: 10,
-        fontSize: 35,
-        color: 'white',
-        alignSelf: 'center',
-        justifyContent: 'center',
-    },
-});
+import { styles } from '../styles';
 
 class Main extends React.Component {
     constructor(props) {
@@ -79,29 +48,29 @@ class Main extends React.Component {
                     onEnter={this._onEnter.bind(this)}
                 />
                 <Image
-                    style={styles.image}
+                    style={styles.mainImage}
                     source={Logo}
                 />
                 <TouchableHighlight
-                    style={styles.button}
+                    style={styles.navButton}
                     onPress={this._handleToSetup.bind(this)}
                     underlayColor="white"
                 >
-                    <Text style={styles.buttonText}> Configuratie </Text>
+                    <Text style={styles.navButtonText}> Configuratie </Text>
                 </TouchableHighlight>
                 <TouchableHighlight
-                    style={styles.button}
+                    style={styles.navButton}
                     onPress={this._handleToGame.bind(this)}
                     underlayColor="white"
                 >
-                    <Text style={styles.buttonText}> Nieuw spel </Text>
+                    <Text style={styles.navButtonText}> Nieuw spel </Text>
                 </TouchableHighlight>
                 <TouchableHighlight
-                    style={styles.button}
+                    style={styles.navButton}
                     onPress={this._handleToExistingGame.bind(this)}
                     underlayColor="white"
                 >
-                    <Text style={styles.buttonText}> Verder spelen </Text>
+                    <Text style={styles.navButtonText}> Verder spelen </Text>
                 </TouchableHighlight>
             </View>
         );
@@ -209,6 +178,7 @@ class Main extends React.Component {
                 this.setState({
                     whereTo: 'config',
                 });
+                this._pushTo();
             }
         }
     }

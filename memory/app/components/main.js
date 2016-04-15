@@ -44,7 +44,7 @@ class Main extends React.Component {
                 <Authenticator
                     modalVisible={this.state.authenticator}
                     modalValues={ this.state.authenticate}
-                    onEnter={this._onEnter.bind(this)}
+                    onEnter={this._onModalEnter.bind(this)}
                 />
                 <Image
                     style={styles.mainImage}
@@ -75,23 +75,37 @@ class Main extends React.Component {
         );
     }
 
-    _onEnter(open) {
+    _onModalEnter(open) {
         if (this.props.config.winner !== {} && this.props.config.winner !== undefined) {
             this.props.updateWinner({});
             this.props.saveStorage();
         }
         if (open) {
-            this.setState({
-                authenticator: false,
-            });
+            this.closeModal();
             this._pushTo();
         } else {
-            this.setState({
-                authenticator: false,
-                authenticate: {},
-                whereTo: '',
-            });
+            this.closeModal();
+            this.emptyNavDestination();
         }
+    }
+
+    emptyNavDestination() {
+        this.setState({
+            whereTo: '',
+        });
+    }
+
+    setNavDestination(destination) {
+        this.setState({
+            whereTo: destination,
+        });
+    }
+
+    closeModal() {
+        this.setState({
+            authenticator: false,
+            authenticate: {},
+        });
     }
 
     _getPasswordObject() {
@@ -102,12 +116,9 @@ class Main extends React.Component {
     }
 
     _handleToSetup() {
-        this.setState({
-            whereTo: 'config',
-        });
+        this.setNavDestination('config');
         this._pushTo();
     }
-
 
     _pushTo() {
         switch (this.state.whereTo) {
@@ -128,10 +139,9 @@ class Main extends React.Component {
         default:
             break;
         }
-        this.setState({
-            whereTo: '',
-        });
+        this.emptyNavDestination();
     }
+
     _reShuffleValues(reset) {
         const list = [...this.props.config.imagesAndPrices];
         if (reset) {
@@ -142,9 +152,7 @@ class Main extends React.Component {
 
         const shuffled = getImagesShuffledAndDoubled(list);
 
-        // save the values in the store
         this.props.reShuffle(list, shuffled);
-        // save the the new store inside the storage
         this.props.saveStorage();
     }
 
@@ -159,23 +167,17 @@ class Main extends React.Component {
         } else if (this.props.config.shuffledImages !== undefined
             && this.props.config.shuffledImages !== null
             && this.props.config.shuffledImages.length > 0) {
-            this.setState({
-                whereTo: 'existingGame',
-            });
+            this.setNavDestination('existingGame');
             this._pushTo();
         } else {
             if (this.props.config.imagesAndPrices !== undefined
                 && this.props.config.imagesAndPrices !== null
                 && this.props.config.imagesAndPrices.length > 0) {
                 this._reShuffleValues(false);
-                this.setState({
-                    whereTo: 'existingGame',
-                });
+                this.setNavDestination('existingGame');
                 this._pushTo();
             } else {
-                this.setState({
-                    whereTo: 'config',
-                });
+                this.setNavDestination('config');
                 this._pushTo();
             }
         }
@@ -193,14 +195,10 @@ class Main extends React.Component {
             && this.props.config.imagesAndPrices !== null
             && this.props.config.imagesAndPrices.length > 0) {
             this._reShuffleValues(true);
-            this.setState({
-                whereTo: 'newGame',
-            });
+            this.setNavDestination('newGame');
             this._pushTo();
         } else {
-            this.setState({
-                whereTo: 'config',
-            });
+            this.setNavDestination('config');
             this._pushTo();
         }
     }

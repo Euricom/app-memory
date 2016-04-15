@@ -26,7 +26,7 @@ class Game extends React.Component {
     constructor(props) {
         super(props);
 
-        const p = this.calculateWidthAndMargin();
+        const p = this.calculateStylesOnTileAmount();
         this.state = {
             modal: false,
             authenticate: {},
@@ -35,7 +35,6 @@ class Game extends React.Component {
             imageWidth: p.imageWidth,
             listMargin: p.listMargin,
             imageMargin: p.margin,
-            back: false,
         };
     }
     render() {
@@ -44,69 +43,68 @@ class Game extends React.Component {
                 <Authenticator
                     modalVisible={this.state.modal}
                     modalValues={this.state.authenticate}
-                    onEnter={this.onEnter.bind(this)}
+                    onEnter={this.onModalEnter.bind(this)}
                 />
-                <View style={this.calculateStyle()}>
+                <View style={this.calculateListStyle()}>
                     {this.renderImages()}
                 </View>
             </View>
         );
     }
-    handleBack() {
-        this.setState({
-            modal: true,
-            authenticate: this.getPasswordObjectForBack,
-            back: true,
-        });
+
+    onModalEnter() {
+        this.turnGameCards();
+        this.emptyReferences();
+        this.emptyStoreWinner();
+        this.closeModal();
     }
-    onEnter(ret) {
-        // turn the shown cards if their timer isn't completed yet
-        this.turnCards();
-        if (this.props.config.winner !== {} && this.props.config.winner !== undefined) {
-            this.props.updateWinner({});
-            this.props.saveStorage();
-        }
-        if (this.state.back) {
-            this.setState({
-                back: false,
-            });
-            if (ret) {
-                this.props.navigator.pop();
-            }
-        }
+
+    closeModal() {
         this.setState({
             modal: false,
         });
     }
-    turnCards() {
+
+    emptyStoreWinner() {
+        if (this.props.config.winner !== {} && this.props.config.winner !== undefined) {
+            this.props.updateWinner({});
+            this.props.saveStorage();
+        }
+    }
+
+    turnGameCards() {
         for (let i = 0; i < this.state.references.length; i++) {
             const index = this.state.references[i].index;
-            this.refs[`item${index}`].setUnactive();
+            this.updateCardActiveState(index, false);
         }
+    }
+
+    emptyReferences() {
         this.setState({
             references: [],
         });
     }
-    cardsDone() {
-        const storeReference = this.state.references[0].item;
 
-        // update the state images
-        this.updateStateImages(storeReference);
-
-        // update the store
-        this.updateStoreImages(storeReference);
-
-        // update the AsyncStorage with the new store
-        this.props.saveStorage();
-
+    openModal(modalValues) {
         this.setState({
             modal: true,
-            authenticate: this.getPasswordObject(storeReference),
-        });
-        this.setState({
-            references: [],
+            authenticate: modalValues,
         });
     }
+
+    setCorrectCards() {
+        const storeReference = this.state.references[0].item;
+        this.updateStateAndStore(storeReference);
+        this.emptyReferences();
+        this.openModal(this.getPasswordObject(storeReference));
+    }
+
+    updateStateAndStore(storeReference) {
+        this.updateStateImages(storeReference);
+        this.updateStoreImages(storeReference);
+        this.props.saveStorage();
+    }
+
     updateStateImages(reference) {
         const list = [...this.state.images];
         for (let i = 0; i < list.length; i++) {
@@ -120,7 +118,6 @@ class Game extends React.Component {
         this.props.saveShuffledImages(list);
     }
 
-    // Updates the store so their images are updated correctly
     updateStoreImages(reference) {
         const imagesAndPrices = [...this.props.config.imagesAndPrices];
         const indexOf = imagesAndPrices.indexOf(reference);
@@ -130,40 +127,47 @@ class Game extends React.Component {
 
         imagesAndPrices.splice(indexOf, 0, ref[0]);
 
-        // update the store
         this.props.updateImages(imagesAndPrices);
 
-        // update the store winner
         this.props.updateWinner(reference);
     }
 
     checkMemory() {
+        console.log('changed');
         if (this.state.references.length === 2) {
             const ref1 = this.state.references[0];
             const ref2 = this.state.references[1];
+
             if (ref1.item.image.reference === ref2.item.image.reference) {
-                this.cardsDone();
+                this.setCorrectCards();
             } else {
-                this.setState({
-                    modal: true,
-                    authenticate: this.getPasswordObjectIncorrect(ref1.item, ref2.item),
-                });
+                this.openModal(this.getPasswordObjectIncorrect(ref1.item, ref2.item));
             }
         }
     }
+
     handleGameItemClick(item, index) {
-        const newReferences = [];
         if (this.state.references.length < 2) {
-            newReferences.push(...this.state.references);
-            newReferences.push({ item, index });
-            this.refs[`item${index}`].setActive();
-            this.setState({
-                references: newReferences,
-            });
+            this.addReference(item, index);
+            this.updateCardActiveState(index, true);
             this.checkMemory();
         }
     }
-    calculateStyle() {
+
+    addReference(item, index) {
+        const newReferences = [];
+        newReferences.push(...this.state.references);
+        newReferences.push({ item, index });
+        this.setState({
+            references: newReferences,
+        });
+    }
+
+    updateCardActiveState(index, value) {
+        this.refs[`item${index}`].setActiveState(value);
+    }
+
+    calculateListStyle() {
         return {
             margin: this.state.listMargin,
             flexDirection: 'row',
@@ -171,7 +175,8 @@ class Game extends React.Component {
             justifyContent: 'center',
         };
     }
-    calculateWidthAndMargin() {
+
+    calculateStylesOnTileAmount() {
         if (this.props.config.tiles <= 12) {
             return {
                 imageWidth: 200,
@@ -209,6 +214,7 @@ class Game extends React.Component {
             margin: 2,
         };
     }
+
     renderImages() {
         const list = this.state.images.map((item, index) => {
             const binder = this.handleGameItemClick.bind(this, item, index);
@@ -247,14 +253,6 @@ class Game extends React.Component {
             footer: 'Toon dit scherm aan een Euricom medewerker',
             image: item.image.image,
             password: true,
-        };
-    }
-
-    getPasswordObjectForBack() {
-        return {
-            header: 'Geef het wachtwoord',
-            password: true,
-            closeText: 'Sluiten',
         };
     }
 }

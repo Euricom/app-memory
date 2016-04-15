@@ -86,20 +86,12 @@ export class GameItem extends React.Component {
             done: true,
         });
     }
-    setUnactive() {
+    setActiveState(value) {
         this.setState({
-            active: false,
-        });
-    }
-    setActive() {
-        this.setState({
-            active: true,
+            active: value,
         });
     }
     handleClick() {
-        // check if own component is already clicked ( should halt possible doubleclicks )
-        // this.setActive();
-
         if (!this.state.done) {
             this.props.onClick();
         }

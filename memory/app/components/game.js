@@ -153,13 +153,15 @@ class Game extends React.Component {
     }
     handleGameItemClick(item, index) {
         const newReferences = [];
-        newReferences.push(...this.state.references);
-        newReferences.push({ item, index });
-
-        this.setState({
-            references: newReferences,
-        });
-        this.checkMemory();
+        if (this.state.references.length < 2) {
+            newReferences.push(...this.state.references);
+            newReferences.push({ item, index });
+            this.refs[`item${index}`].setActive();
+            this.setState({
+                references: newReferences,
+            });
+            this.checkMemory();
+        }
     }
     calculateStyle() {
         return {

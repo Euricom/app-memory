@@ -50,9 +50,15 @@ export class GameItem extends React.Component {
         );
     }
     _onPressIn() {
+        if (this.state.active) {
+            return;
+        }
         this._scrollSpin.setEndValue(0.5);
     }
     _onPressOut() {
+        if (this.state.active) {
+            return;
+        }
         this._scrollSpin.setEndValue(1);
         this.handleClick();
     }
@@ -85,15 +91,15 @@ export class GameItem extends React.Component {
             active: false,
         });
     }
-    handleClick() {
-        // check if own component is already clicked ( should halt possible doubleclicks)
-        if (this.state.active) {
-            return;
-        }
-
+    setActive() {
         this.setState({
             active: true,
         });
+    }
+    handleClick() {
+        // check if own component is already clicked ( should halt possible doubleclicks )
+        // this.setActive();
+
         if (!this.state.done) {
             this.props.onClick();
         }

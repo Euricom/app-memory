@@ -1,25 +1,27 @@
 /* eslint-disable camelcase*/
-import img_0 from './img_0.jpg';
-import img_1 from './img_1.jpg';
-import img_2 from './img_2.jpg';
-import img_3 from './img_3.jpg';
-import img_4 from './img_4.jpg';
-import img_5 from './img_5.jpg';
-import img_6 from './img_6.jpg';
-import img_7 from './img_7.jpg';
-import img_8 from './img_8.jpg';
-import img_9 from './img_9.jpg';
-import img_10 from './img_10.jpg';
-import img_11 from './img_11.jpg';
-import img_12 from './img_12.jpg';
-import img_13 from './img_13.jpg';
-import img_14 from './img_14.jpg';
-import img_15 from './img_15.jpeg';
-import img_16 from './img_16.jpg';
-import img_17 from './img_17.jpg';
-import img_18 from './img_18.jpg';
-import img_19 from './img_19.jpg';
-import img_20 from './img_20.png';
+
+// Import of the images
+import img_0 from './images/img_0.jpg';
+import img_1 from './images/img_1.jpg';
+import img_2 from './images/img_2.jpg';
+import img_3 from './images/img_3.jpg';
+import img_4 from './images/img_4.jpg';
+import img_5 from './images/img_5.jpg';
+import img_6 from './images/img_6.jpg';
+import img_7 from './images/img_7.jpg';
+import img_8 from './images/img_8.jpg';
+import img_9 from './images/img_9.jpg';
+import img_10 from './images/img_10.jpg';
+import img_11 from './images/img_11.jpg';
+import img_12 from './images/img_12.jpg';
+import img_13 from './images/img_13.jpg';
+import img_14 from './images/img_14.jpg';
+import img_15 from './images/img_15.jpeg';
+import img_16 from './images/img_16.jpg';
+import img_17 from './images/img_17.jpg';
+import img_18 from './images/img_18.jpg';
+import img_19 from './images/img_19.jpg';
+import img_20 from './images/img_20.png';
 // import img_21 from './img_21.jpg';
 // import img_22 from './img_22.jpg';
 // import img_23 from './img_23.jpg';
@@ -29,12 +31,8 @@ import img_20 from './img_20.png';
 // import img_27 from './img_27.jpg';
 // import img_28 from './img_28.jpg';
 // import img_29 from './img_29.jpg';
-import logo from './logo.png';
-import question from './question.png';
-export const pw = '5374';
-
-export const Logo = logo;
-export const Question = question;
+import logo from './images/logo.png';
+import question from './images/question.png';
 
 const Images = [
     { reference: 'img_0', image: img_0 },
@@ -124,5 +122,10 @@ export function getImagesShuffledAndDoubledByAmount(amount) {
 
     return getImagesShuffledAndDoubled(toReturn);
 }
+
+export const Logo = logo;
+export const Question = question;
+
+export const pw = '5374';
 
 /* eslint-enable camelcase*/

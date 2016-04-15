@@ -103,8 +103,6 @@ class Main extends React.Component {
 
     _handleToSetup() {
         this.setState({
-            // authenticator: true,
-            // authenticate: this.getPasswordObjectForSetup,
             whereTo: 'config',
         });
         this._pushTo();
@@ -143,6 +141,7 @@ class Main extends React.Component {
         }
 
         const shuffled = getImagesShuffledAndDoubled(list);
+
         // save the values in the store
         this.props.reShuffle(list, shuffled);
         // save the the new store inside the storage

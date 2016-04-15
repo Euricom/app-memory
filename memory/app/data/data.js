@@ -69,17 +69,22 @@ const Images = [
     // { reference: 'img_29', image: img_29 }
 ];
 
-function shuffle(list) {
-    const listToReturn = [...list];
-    let j;
-    let x;
-    for (let i = listToReturn.length; i; i -= 1) {
-        j = Math.floor(Math.random() * i);
-        x = list[i - 1];
-        listToReturn[i - 1] = listToReturn[j];
-        listToReturn[j] = x;
+function shuffle(array) {
+    let currentIndex = array.length, temporaryValue, randomIndex;
+
+    // While there remain elements to shuffle...
+    while (currentIndex !== 0) {
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
     }
-    return listToReturn;
+
+    return array;
 }
 
 export function getImages(amount) {
@@ -95,10 +100,10 @@ export function getImages(amount) {
     This function will shuffle and double the inserted images array.
 */
 export function getImagesShuffledAndDoubled(images) {
-    let list = [...images];
-    list.push(...list);
-    list = shuffle(list);
-    return list;
+    const list = [...images, ...images];
+
+    const toReturn = shuffle(list);
+    return toReturn;
 }
 
 /*

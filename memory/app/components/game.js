@@ -37,6 +37,9 @@ class Game extends React.Component {
             listMarginTop: p.listMarginTop,
             imageMargin: p.margin,
         };
+        if (this.props.config.winner.header !== undefined) {
+            this.openModal(this.props.config.winner, 600);
+        }
     }
     render() {
         return (
@@ -88,18 +91,29 @@ class Game extends React.Component {
         });
     }
 
-    openModal(modalValues) {
-        this.setState({
-            modal: true,
-            authenticate: modalValues,
-        });
+    openModal(modalValues, delay) {
+        setTimeout(() => {
+            this.setState({
+                modal: true,
+                authenticate: modalValues,
+            });
+        }, delay);
+    }
+
+    setIncorrectCards() {
+        const ref1 = this.state.references[0];
+        const ref2 = this.state.references[1];
+
+        this.updateWinner(this.getPasswordObjectIncorrect(ref1.item, ref2.item));
+        this.props.saveStorage();
+        this.openModal(this.getPasswordObjectIncorrect(ref1.item, ref2.item), 750);
     }
 
     setCorrectCards() {
         const storeReference = this.state.references[0].item;
         this.updateStateAndStore(storeReference);
         this.emptyReferences();
-        this.openModal(this.getPasswordObject(storeReference));
+        this.openModal(this.getPasswordObject(storeReference), 750);
     }
 
     updateWinner(modalValue) {
@@ -146,9 +160,7 @@ class Game extends React.Component {
             if (ref1.item.image.reference === ref2.item.image.reference) {
                 this.setCorrectCards();
             } else {
-                this.updateWinner(this.getPasswordObjectIncorrect(ref1.item, ref2.item));
-                this.props.saveStorage();
-                this.openModal(this.getPasswordObjectIncorrect(ref1.item, ref2.item));
+                this.setIncorrectCards();
             }
         }
     }

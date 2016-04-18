@@ -86,7 +86,11 @@ Navigate to memory/app/data where you will see a javascript file named data.js a
     - if the name remains the same, nothing must be done.
     - if the name changes, the value must be updated in the data.js file.
 
-## UI guide
+### App Icons
+
+The app icons can be found under
+
+    memory/ios/memory/images.xcassets/AppIcon.appiconset
 
 ### starting the App:
 

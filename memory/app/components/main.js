@@ -30,7 +30,6 @@ class Main extends React.Component {
             authenticator: true,
             whereTo: '',
             authenticate: this._getPasswordObject(),
-            startup: true,
         };
     }
 
@@ -80,26 +79,12 @@ class Main extends React.Component {
     _onModalEnter(isPassword, pw) {
         if (isPassword) {
             if (pw === this.props.config.password) {
-                if (!this.state.startup) {
-                    if (this.props.config.winner.header !== undefined) {
-                        this.emptyStoreWinner();
-                    }
-                }
                 this.closeModal();
                 this._pushTo();
-                this.setState({
-                    startup: false,
-                });
             }
         } else {
             this.closeModal();
             this._pushTo();
-        }
-    }
-    emptyStoreWinner() {
-        if (this.props.config.winner.header !== undefined) {
-            this.props.updateWinner({});
-            this.props.saveStorage();
         }
     }
     emptyNavDestination() {
@@ -166,17 +151,12 @@ class Main extends React.Component {
         const shuffled = getImagesShuffledAndDoubled(list);
 
         this.props.reShuffle(list, shuffled);
+        this.props.updateWinner({});
         this.props.saveStorage();
     }
 
     _handleToExistingGame() {
-        if (this.props.config.winner.header !== undefined) {
-            this.setNavDestination('existingGame');
-            this.setState({
-                authenticator: true,
-                authenticate: this.props.config.winner,
-            });
-        } else if (this.props.config.shuffledImages !== undefined
+        if (this.props.config.shuffledImages !== undefined
             && this.props.config.shuffledImages !== null
             && this.props.config.shuffledImages.length > 0) {
             this.setNavDestination('existingGame');
@@ -196,14 +176,15 @@ class Main extends React.Component {
     }
 
     _handleToGame() {
-        if (this.props.config.winner.header !== undefined) {
-            this._reShuffleValues(true);
-            this.setNavDestination('newGame');
-            this.setState({
-                authenticator: true,
-                authenticate: this.props.config.winner,
-            });
-        } else if (this.props.config.imagesAndPrices !== undefined
+        // if (this.props.config.winner.header !== undefined) {
+        //     this._reShuffleValues(true);
+        //     this.setNavDestination('newGame');
+        //     this.setState({
+        //         authenticator: true,
+        //         authenticate: this.props.config.winner,
+        //     });
+        // } else
+        if (this.props.config.imagesAndPrices !== undefined
             && this.props.config.imagesAndPrices !== null
             && this.props.config.imagesAndPrices.length > 0) {
             this._reShuffleValues(true);

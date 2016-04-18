@@ -106,10 +106,19 @@ export class ChangePasswordComponent extends React.Component {
     save() {
         if (this.props.oldPassword === this.state.originalPassword
             && this.state.newPassword === this.state.newPasswordAgain) {
-            this.props.onSave(this.state.newPassword);
+            if (this.state.newPassword === undefined || this.state.newPassword === '') {
+                this.setState({
+                    hasError: 'New passwords are empty!',
+                    originalPassword: '',
+                    newPassword: '',
+                    newPasswordAgain: '',
+                });
+            } else {
+                this.props.onSave(true, this.state.newPassword);
+            }
         } else {
             this.setState({
-                hasError: true,
+                hasError: 'Passwords do not match!',
                 originalPassword: '',
                 newPassword: '',
                 newPasswordAgain: '',
@@ -118,7 +127,7 @@ export class ChangePasswordComponent extends React.Component {
     }
 
     close() {
-        this.props.onSave();
+        this.props.onSave(false);
     }
 
     handleInputOriginalPassword(event) {

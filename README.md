@@ -88,4 +88,28 @@ Navigate to memory/app/data where you will see a javascript file named data.js a
 
 ## UI guide
 
-There are a few things to be known about the app.
+### starting the App:
+
+Upon installation of the app (no previous data) the user must enter the default code 0000 to get started.
+
+The user gets 3 selections:
+
+    - configuration
+        => configure the amount of tiles
+        => what images need to be coupled to the tiles
+        => change the Password ( this opens a popup )
+        ==> the option remains to not update the configuration. Note that the password is not directly linked to the game configuration.
+    - new game
+        => starts a new game based upon the made configuration
+        => when no configuration is present, open the configuration View
+    - continue game
+        => continues the game on the made configuration
+        => when no configuration is present, open the configuration View
+
+### GAME RULES:
+
+    - upon the selection of 2 images the user must reenter the password.
+        => when incorrect images both images are shown with a red border.
+        => when correct images the image is shown in a green border.
+    - the game cannot be cancelled through the app.
+        => the app needs to be killed to get out of the game view.

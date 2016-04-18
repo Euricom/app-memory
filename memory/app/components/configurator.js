@@ -116,11 +116,12 @@ class Configurator extends React.Component {
         });
     }
 
-    onPasswordSave(newPassword) {
-        if (newPassword !== 'undefined') {
+    onPasswordSave(save, newPassword) {
+        if (save && newPassword !== 'undefined') {
             this.props.updatePassword(newPassword);
             this.props.saveStorage();
         }
+
         this.setState({
             modal: false,
         });

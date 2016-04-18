@@ -33,7 +33,8 @@ class Game extends React.Component {
             references: [],
             images: this.props.images,
             imageWidth: p.imageWidth,
-            listMargin: p.listMargin,
+            listMarginRightAndLeft: p.listMargin,
+            listMarginTop: p.listMarginTop,
             imageMargin: p.margin,
         };
     }
@@ -175,9 +176,9 @@ class Game extends React.Component {
 
     calculateListStyle() {
         return {
-            marginTop: 15,
-            marginLeft: this.state.listMargin,
-            marginRight: this.state.listMargin,
+            marginTop: this.state.listMarginTop,
+            marginLeft: this.state.listMarginRightAndLeft,
+            marginRight: this.state.listMarginRightAndLeft,
             flexDirection: 'row',
             flexWrap: 'wrap',
             justifyContent: 'center',
@@ -190,6 +191,7 @@ class Game extends React.Component {
             return {
                 imageWidth: 350,
                 listMargin: 25,
+                listMarginTop: 15,
                 margin: 5,
             };
         } else if (this.props.config.tiles <= 6) {
@@ -202,54 +204,63 @@ class Game extends React.Component {
             return {
                 imageWidth: 235,
                 listMargin: 25,
+                listMarginTop: 15,
                 margin: 5,
             };
         } else if (this.props.config.tiles <= 12) {
             return {
                 imageWidth: 200,
                 listMargin: 25,
+                listMarginTop: 15,
                 margin: 5,
             };
         } else if (this.props.config.tiles <= 16) {
             return {
                 imageWidth: 165,
                 listMargin: 50,
+                listMarginTop: 15,
                 margin: 10,
             };
         } else if (this.props.config.tiles <= 20) {
             return {
                 imageWidth: 165,
                 listMargin: 25,
+                listMarginTop: 15,
                 margin: 10,
             };
         } else if (this.props.config.tiles <= 24) {
             return {
                 imageWidth: 150,
                 listMargin: 15,
+                listMarginTop: 70,
                 margin: 5,
             };
         } else if (this.props.config.tiles <= 30) {
             return {
                 imageWidth: 130,
                 listMargin: 5,
+                listMarginTop: 15,
                 margin: 5,
             };
         } else if (this.props.config.tiles <= 42) {
             return {
                 imageWidth: 110,
                 listMargin: 50,
+                listMarginTop: 15,
                 margin: 3,
             };
         } else if (this.props.config.tiles <= 54) {
             return {
                 imageWidth: 100,
                 listMargin: 5,
+                listMarginTop: 15,
                 margin: 2,
             };
         }
         return {
             imageWidth: 90,
             listMargin: 5,
+            listMarginTop: 15,
             margin: 2,
         };
     }

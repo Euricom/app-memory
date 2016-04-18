@@ -21,7 +21,7 @@ const borderWidth = 2;
 const configImageButtonWidth = 90;
 
 const globalMargin = 15;
-const smallMargin = 5;
+const smallMargin = 2;
 const gameMargin = 2;
 const globalPadding = 10;
 

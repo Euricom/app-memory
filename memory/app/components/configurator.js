@@ -14,10 +14,12 @@ import { connect } from 'react-redux';
 import {
     updateConfigAction,
     saveStorageAction,
+    savePasswordAction,
 } from '../actions/config.actions';
 
 import { ConfiguratorImage } from './configurator.image';
 import { BrowseImage } from './browseImage';
+import { ChangePasswordComponent } from './changePasswordComponent';
 import { getImages, Question } from '../data/data';
 
 import { styles } from '../styles';
@@ -28,6 +30,7 @@ class Configurator extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            modal: false,
             question: Question,
             tiles: 0,
             images: getImages(30),
@@ -39,6 +42,18 @@ class Configurator extends React.Component {
     render() {
         return (
             <ScrollView style={styles.container}>
+                <ChangePasswordComponent
+                    modalVisible={this.state.modal}
+                    oldPassword={this.props.config.password}
+                    onSave={this.onPasswordSave.bind(this)}
+                />
+                <TouchableHighlight
+                    style={styles.navSmallButton}
+                    onPress={this.changePassword.bind(this)}
+                    underlayColor="white"
+                >
+                    <Text style={styles.navSmallButtonText}> Change password </Text>
+                </TouchableHighlight>
                 <View
                     style={styles.rowContainer}
                 >
@@ -94,6 +109,23 @@ class Configurator extends React.Component {
             </ScrollView>
         );
     }
+
+    changePassword() {
+        this.setState({
+            modal: true,
+        });
+    }
+
+    onPasswordSave(newPassword) {
+        if (newPassword !== 'undefined') {
+            this.props.updatePassword(newPassword);
+            this.props.saveStorage();
+        }
+        this.setState({
+            modal: false,
+        });
+    }
+
     _differentAmount() {
         if (this.state.differentAmount) {
             return (
@@ -134,7 +166,7 @@ class Configurator extends React.Component {
             this.state.question,
             this.state.tiles,
             imagesAndPrices);
-        this.props.saveInStore();
+        this.props.saveStorage();
 
         this.props.navigator.pop();
     }
@@ -231,8 +263,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         updateConfig: (question, tiles, imagesAndPrices) => {
             dispatch(updateConfigAction(question, tiles, imagesAndPrices));
         },
-        saveInStore: () => {
+        saveStorage: () => {
             dispatch(saveStorageAction());
+        },
+        updatePassword: (newPassword) => {
+            dispatch(savePasswordAction(newPassword));
         },
     };
 };

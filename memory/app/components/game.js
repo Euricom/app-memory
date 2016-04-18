@@ -52,11 +52,13 @@ class Game extends React.Component {
         );
     }
 
-    onModalEnter() {
-        this.turnGameCards();
-        this.emptyReferences();
-        this.emptyStoreWinner();
-        this.closeModal();
+    onModalEnter(isPassword, pw) {
+        if (pw === this.props.config.password) {
+            this.turnGameCards();
+            this.emptyReferences();
+            this.emptyStoreWinner();
+            this.closeModal();
+        }
     }
 
     closeModal() {
@@ -99,9 +101,14 @@ class Game extends React.Component {
         this.openModal(this.getPasswordObject(storeReference));
     }
 
+    updateWinner(modalValue) {
+        this.props.updateWinner(modalValue);
+    }
+
     updateStateAndStore(storeReference) {
         this.updateStateImages(storeReference);
         this.updateStoreImages(storeReference);
+        this.updateWinner(this.getPasswordObject(storeReference));
         this.props.saveStorage();
     }
 
@@ -128,12 +135,9 @@ class Game extends React.Component {
         imagesAndPrices.splice(indexOf, 0, ref[0]);
 
         this.props.updateImages(imagesAndPrices);
-
-        this.props.updateWinner(reference);
     }
 
     checkMemory() {
-        console.log('changed');
         if (this.state.references.length === 2) {
             const ref1 = this.state.references[0];
             const ref2 = this.state.references[1];
@@ -141,6 +145,8 @@ class Game extends React.Component {
             if (ref1.item.image.reference === ref2.item.image.reference) {
                 this.setCorrectCards();
             } else {
+                this.updateWinner(this.getPasswordObjectIncorrect(ref1.item, ref2.item));
+                this.props.saveStorage();
                 this.openModal(this.getPasswordObjectIncorrect(ref1.item, ref2.item));
             }
         }
@@ -169,19 +175,52 @@ class Game extends React.Component {
 
     calculateListStyle() {
         return {
-            margin: this.state.listMargin,
+            marginTop: 15,
+            marginLeft: this.state.listMargin,
+            marginRight: this.state.listMargin,
             flexDirection: 'row',
             flexWrap: 'wrap',
             justifyContent: 'center',
+            alignItems: 'center',
         };
     }
 
     calculateStylesOnTileAmount() {
-        if (this.props.config.tiles <= 12) {
+        if (this.props.config.tiles <= 4) {
+            return {
+                imageWidth: 350,
+                listMargin: 25,
+                margin: 5,
+            };
+        } else if (this.props.config.tiles <= 6) {
+            return {
+                imageWidth: 300,
+                listMargin: 25,
+                margin: 5,
+            };
+        } else if (this.props.config.tiles <= 8) {
+            return {
+                imageWidth: 235,
+                listMargin: 25,
+                margin: 5,
+            };
+        } else if (this.props.config.tiles <= 12) {
             return {
                 imageWidth: 200,
                 listMargin: 25,
                 margin: 5,
+            };
+        } else if (this.props.config.tiles <= 16) {
+            return {
+                imageWidth: 165,
+                listMargin: 50,
+                margin: 10,
+            };
+        } else if (this.props.config.tiles <= 20) {
+            return {
+                imageWidth: 165,
+                listMargin: 25,
+                margin: 10,
             };
         } else if (this.props.config.tiles <= 24) {
             return {
@@ -241,7 +280,6 @@ class Game extends React.Component {
             header: 'Jammer, u heeft geen prijs gewonnen.',
             footer: 'Toon dit scherm aan een Euricom medewerker.',
             password: true,
-            passwordText: 'Unlock',
             image1: ref1.image.image,
             image2: ref2.image.image,
         };

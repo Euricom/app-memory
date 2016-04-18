@@ -1,4 +1,4 @@
-/* eslint-disable camelcase*/
+/* eslint-disable camelcase, one-var, one-var-declaration-per-line*/
 
 // Import of the images
 import img_0 from './images/img_0.jpg';
@@ -125,7 +125,5 @@ export function getImagesShuffledAndDoubledByAmount(amount) {
 
 export const Logo = logo;
 export const Question = question;
-
-export const pw = '5374';
 
 /* eslint-enable camelcase*/

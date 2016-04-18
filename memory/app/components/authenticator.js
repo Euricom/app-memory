@@ -8,8 +8,6 @@ import React, {
     Image,
 } from 'react-native';
 
-import { pw } from '../data/data';
-
 import { styles } from '../styles';
 
 export class Authenticator extends React.Component {
@@ -144,24 +142,13 @@ export class Authenticator extends React.Component {
     }
     /* eslint-enable */
     close() {
-        this.setState({
-            password: '',
-        });
-        this.props.onEnter(false);
-    }
-    checkPassword() {
-        if (pw === this.state.inputValue) {
-            this.setState({
-                inputValue: '',
-            });
-            this.props.onEnter(true);
-        }
+        this.props.onEnter(this.props.modalValues.password, '');
     }
     handleInput(event) {
         this.setState({
             inputValue: event.nativeEvent.text,
         });
-        this.checkPassword();
+        this.props.onEnter(this.props.modalValues.password, this.state.inputValue);
     }
 }
 

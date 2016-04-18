@@ -5,3 +5,4 @@ export const UPLOAD_STORAGE = 'UploadStorage';
 export const UPDATE_CONFIG_WINNER = 'UpdateConfigWinner';
 export const SAVE_SHUFFLEDIMAGES = 'SaveShuffledImages';
 export const SAVE_NEWSHUFFLEDIMAGES = 'SaveNewShuffledImages';
+export const SAVE_PASSWORD = 'SavePassword';

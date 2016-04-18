@@ -30,8 +30,10 @@ class Main extends React.Component {
             authenticator: true,
             whereTo: '',
             authenticate: this._getPasswordObject(),
+            startup: true,
         };
     }
+
     componentDidMount() {
         /* eslint-disable react/prop-types */
         this.props.uploadStorage();
@@ -75,20 +77,31 @@ class Main extends React.Component {
         );
     }
 
-    _onModalEnter(open) {
-        if (this.props.config.winner !== {} && this.props.config.winner !== undefined) {
+    _onModalEnter(isPassword, pw) {
+        if (isPassword) {
+            if (pw === this.props.config.password) {
+                if (!this.state.startup) {
+                    if (this.props.config.winner.header !== undefined) {
+                        this.emptyStoreWinner();
+                    }
+                }
+                this.closeModal();
+                this._pushTo();
+                this.setState({
+                    startup: false,
+                });
+            }
+        } else {
+            this.closeModal();
+            this._pushTo();
+        }
+    }
+    emptyStoreWinner() {
+        if (this.props.config.winner.header !== undefined) {
             this.props.updateWinner({});
             this.props.saveStorage();
         }
-        if (open) {
-            this.closeModal();
-            this._pushTo();
-        } else {
-            this.closeModal();
-            this.emptyNavDestination();
-        }
     }
-
     emptyNavDestination() {
         this.setState({
             whereTo: '',
@@ -157,12 +170,11 @@ class Main extends React.Component {
     }
 
     _handleToExistingGame() {
-        if (this.props.config.winner !== null
-            && this.props.config.winner !== undefined
-            && this.props.config.winner.image !== undefined) {
+        if (this.props.config.winner.header !== undefined) {
+            this.setNavDestination('existingGame');
             this.setState({
                 authenticator: true,
-                authenticate: this._getPasswordObject(this.props.config.winner),
+                authenticate: this.props.config.winner,
             });
         } else if (this.props.config.shuffledImages !== undefined
             && this.props.config.shuffledImages !== null
@@ -184,12 +196,12 @@ class Main extends React.Component {
     }
 
     _handleToGame() {
-        if (this.props.config.winner !== null
-            && this.props.config.winner !== undefined
-            && this.props.config.winner.image !== undefined) {
+        if (this.props.config.winner.header !== undefined) {
+            this._reShuffleValues(true);
+            this.setNavDestination('newGame');
             this.setState({
                 authenticator: true,
-                authenticate: this._getPasswordObject(this.props.config.winner),
+                authenticate: this.props.config.winner,
             });
         } else if (this.props.config.imagesAndPrices !== undefined
             && this.props.config.imagesAndPrices !== null

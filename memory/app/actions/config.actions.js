@@ -55,3 +55,12 @@ export function saveNewShuffledImagesAction(images, shuffledImages) {
         },
     };
 }
+
+export function savePasswordAction(password) {
+    return {
+        type: types.SAVE_PASSWORD,
+        payload: {
+            password,
+        },
+    };
+}

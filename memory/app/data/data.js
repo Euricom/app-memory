@@ -16,17 +16,17 @@ import img_11 from './images/img_11.jpg';
 import img_12 from './images/img_12.jpg';
 import img_13 from './images/img_13.jpg';
 import img_14 from './images/img_14.jpg';
-import img_15 from './images/img_15.jpeg';
+import img_15 from './images/img_15.jpg';
 import img_16 from './images/img_16.jpg';
 import img_17 from './images/img_17.jpg';
 import img_18 from './images/img_18.jpg';
 import img_19 from './images/img_19.jpg';
-import img_20 from './images/img_20.png';
-// import img_21 from './img_21.jpg';
-// import img_22 from './img_22.jpg';
-// import img_23 from './img_23.jpg';
-// import img_24 from './img_24.jpg';
-// import img_25 from './img_25.jpg';
+import img_20 from './images/img_20.jpg';
+import img_21 from './images/img_21.png';
+import img_22 from './images/img_22.jpg';
+import img_23 from './images/img_23.jpg';
+import img_24 from './images/img_24.jpg';
+// import img_25 from './images/img_25.jpg';
 // import img_26 from './img_26.jpg';
 // import img_27 from './img_27.jpg';
 // import img_28 from './img_28.jpg';
@@ -56,11 +56,11 @@ const Images = [
     { reference: 'img_18', image: img_18 },
     { reference: 'img_19', image: img_19 },
     { reference: 'img_20', image: img_20 },
-    // { reference: 'img_21', image: img_21 },
-    // { reference: 'img_22', image: img_22 },
-    // { reference: 'img_23', image: img_23 },
-    // { reference: 'img_24', image: img_24 },
-    // { reference: 'img_25', image: img_25 },
+    { reference: 'img_21', image: img_21 },
+    { reference: 'img_22', image: img_22 },
+    { reference: 'img_23', image: img_23 },
+    { reference: 'img_24', image: img_24 },
+    //{ reference: 'img_25', image: img_25 },
     // { reference: 'img_26', image: img_26 },
     // { reference: 'img_27', image: img_27 },
     // { reference: 'img_28', image: img_28 },
